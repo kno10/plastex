@@ -1856,7 +1856,7 @@ class color(ColorEnvironment):
 
 class textcolor(ColorCommand):
     r"""The \textcolor command (c.f. pg 22, xcolor v2.12, 2016/05/11)"""
-    args = '[ model:str ] color:str self'
+    args = '< overlay > [ model:str ] color:str self'
 
     def digest(self, tokens) -> None:
         Command.digest(self, tokens)
@@ -1910,6 +1910,9 @@ class definecolor(ColorCommand):
         mathjax and the HTML5 renderer.
         """
         return r'{children}'.format(children = sourceChildren(self))
+
+class xdefinecolor(definecolor):
+    pass
 
 class DefineNamedColor(definecolor):
     r"""The \DefineNamedColor command, an alternate form of \definecolor.

@@ -19,7 +19,10 @@
 {% if config.html5['use-mathjax'] %}
 <script>
   MathJax = { 
+    loader: {load: ['[tex]/mathtools', '[tex]/ams', [tex]/textmacros', '[tex]/textcomp']},
     tex: {
+	packages: {'[+]': ['mathtools','ams','textmacros']},
+	textmacros: { packages: {'[+]': ['textcomp']} },
 {% if config.html5['mathjax-dollars'] %}
 		    inlineMath: [['$','$'], ['\\(','\\)']],
 {% else %}

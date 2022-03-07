@@ -12,3 +12,6 @@ class usetikzlibrary(Command):
 
 class tikzset(Command):
     args = "library"
+
+class tikzstyle(Command):
+    args = "{ key:str } = [ val:str ]"
