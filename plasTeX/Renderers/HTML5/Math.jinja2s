@@ -2,7 +2,7 @@ name: math
 {{ obj.mathjax_source }}
 
 name: ensuremath DeclareMathOperator
-<span>${{ obj.source }}$</span>
+<span>\({{ obj.mathjax_source }}\)</span>
 
 name: displaymath equation* eqnarray eqnarray* align align* gather gather* flalign flalign* multline multline* alignat alignat* split
 <div class="displaymath" id="{{ obj.id }}">

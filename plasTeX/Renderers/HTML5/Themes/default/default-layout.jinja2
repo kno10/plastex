@@ -19,11 +19,14 @@
 {% if config.html5['use-mathjax'] %}
 <script>
   MathJax = { 
+    loader: {load: ['[tex]/mathtools', '[tex]/ams', [tex]/textmacros', '[tex]/textcomp']},
     tex: {
+	packages: {'[+]': ['mathtools','ams','textmacros']},
+	textmacros: { packages: {'[+]': ['textcomp']} },
 {% if config.html5['mathjax-dollars'] %}
-		    inlineMath: [['$','$'], ['\\(','\\)']]
+		    inlineMath: [['$','$'], ['\\(','\\)']],
 {% else %}
-		    inlineMath: [['\\(','\\)']]
+		    inlineMath: [['\\(','\\)']],
 {% endif %}
 {% if config['mathjax-macros']['macros'] %}
       macros: { {% for key, val in config['mathjax-macros']['macros'].items() %}

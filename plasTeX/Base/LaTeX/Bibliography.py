@@ -144,6 +144,9 @@ class bibcite(Command):
         bibcites[self.attributes['key']] = value
         doc.userdata.setPath('bibliography/bibcites', bibcites)
 
+class fullcite(cite):
+    pass
+
 class citation(Command):
     pass
 

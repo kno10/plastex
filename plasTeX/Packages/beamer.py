@@ -395,8 +395,18 @@ class useinnertheme(Command):
 class useoutertheme(Command):
     args = '[ options:dict ] name:list:str'
 
+class usebeamercolor(Command):
+    args = '[ options:dict ] name:str'
+
 class addheadbox(Command):
     args = 'color template'
 
 class addfootbox(Command):
     args = 'color template'
+
+from plasTeX.Base.LaTeX.Verbatim import verb
+class note(verb):
+    def invoke(self, tex):
+        verb.invoke(self, tex)
+        return []
+

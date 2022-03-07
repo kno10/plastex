@@ -24,11 +24,11 @@ class NegativeThinSpace(Command):
 
 class MediumSpace(Command):
     macroName = ':'
-    str = '\u8196'
+    str = '\u205f'
 
 class ThickSpace(Command):
     macroName = ';'
-    str = '\u8194'
+    str = '\u2005'
 
 class ThinSpace_(Command):
     macroName = '/'
@@ -55,7 +55,7 @@ class MathEnvironmentPre(MathEnvironment):
 
 def mathjax_lt_gt(s: str) -> str:
     """Help mathjax deal with < and >, see http://docs.mathjax.org/en/latest/input/tex/html.html?highlight=lt#html-special-characters."""
-    return s.replace('<', r'{\lt}').replace('>', r'{\gt}')
+    return s.replace('<', r'&lt;').replace('>', r'&gt;') #.replace('\\ensuremath','')
 
 class math(MathEnvironment):
     @property
@@ -121,6 +121,16 @@ class EndMath(Command):
 
 class ensuremath(Command):
     args = 'self'
+    mathMode = True
+    @property
+    def source(self):
+        return sourceChildren(self)
+
+    @property
+    def mathjax_source(self):
+        if self.hasChildNodes():
+            return mathjax_lt_gt(sourceChildren(self))
+        return ""
 
 class equation(MathEnvironment):
     blockType = True
