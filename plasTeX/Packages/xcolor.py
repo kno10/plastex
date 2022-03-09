@@ -708,7 +708,6 @@ class Color:
             else:
                 raise ColorError('Named color "{}" not found in color database.'.format(spec))
 
-
     def as_model(self, model: ColorModel) -> 'Color':
         """Return this color in the specified color model.
 
@@ -1834,7 +1833,7 @@ class ColorCommand(Command, ColorCommandClass):
     
 class color(ColorEnvironment):
     r"""The \color command (c.f. pg 22, xcolor v2.12, 2016/05/11)"""
-    args = '[ model:str ] color:str'
+    args = '< overlay > [ model:str ] color:str'
 
     def digest(self, tokens) -> None:
         Environment.digest(self, tokens)

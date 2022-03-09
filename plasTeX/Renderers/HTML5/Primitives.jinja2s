@@ -1,8 +1,9 @@
 name: par 
 {% if obj.blockType %}
 {{ obj }}
-{% else %}
+{% else %}{% if obj %}
 <p>{{ obj }}</p>
+{% endif %}
 {% endif %}
 
 name: active::^ 

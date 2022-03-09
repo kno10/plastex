@@ -10,7 +10,7 @@ TODO:
 """
 
 import re, string
-from plasTeX import Base, Text
+from plasTeX import Base, Text, log
 
 def ProcessOptions(options, document):
     """ Process package options """
@@ -459,9 +459,10 @@ class citet(NatBibCite):
         sameauthor = prevauthor = None
         bibitems = self.bibitems
         for i, item in enumerate(bibitems):
+            if text is None and not item.bibcite.attributes:
+                log.warning("Unresolved reference: {}".format(item.attributes['key']))
+                text = "?" # missing ref
             if text is None:
-                if not item.bibcite.attributes:
-                    continue
                 fullauthor = item.bibcite.attributes['fullauthor'].textContent
                 sameauthor = (prevauthor == fullauthor)
                 prevauthor = fullauthor
@@ -540,33 +541,17 @@ class citep(NatBibCite):
         res = self.ownerDocument.createDocumentFragment()
         res.append(self.punctuation['open'])
         res.append(self.prenote)
-        i = 0
         sameauthor = prevauthor = None
         bibitems = self.bibitems
         for i, item in enumerate(bibitems):
-            if text is None:
-                if item.bibcite.attributes is None:
-                    continue
-                fullauthor = item.bibcite.attributes['fullauthor'].textContent
-                sameauthor = (prevauthor == fullauthor)
-                prevauthor = fullauthor
-                # Author, only print author if it wasn't equal to the last author
-                if sameauthor:
-                    res.pop()
-                    res.append(self.years+' ')
-                else:
-                    author = self.selectAuthorField(item.attributes['key'], full=full)
-                    if i == 0 and capitalize:
-                        res.extend(self.capitalize(item.bibcite.attributes[author]))
-                    else:
-                        res.extend(item.bibcite.attributes[author])
-                    res.append(self.dates+' ')
-            res.append(self.citeValue(item, text=text))
-            if i < (len(bibitems)-1):
+            if i > 0:
                 res.append(self.separator+' ')
-            else:
-                res.append(self.postnote)
-                res.append(self.punctuation['close'])
+            if text is None and not item.bibcite.attributes:
+                log.warning("Unresolved reference: {}".format(item.attributes['key']))
+                text = "?" # missing ref
+            res.append(self.citeValue(item, text=text))
+        res.append(self.postnote)
+        res.append(self.punctuation['close'])
         return res
 
     def numcitation(self):
@@ -598,9 +583,9 @@ class citep(NatBibCite):
 class cite(citep, citet):
 
     def citation(self, full=False, capitalize=False):
-        if self.prenote or self.postnote:
-            return citep.citation(self, full=full, capitalize=capitalize)
-        return citet.citation(self, full=full, capitalize=capitalize)
+        #if self.prenote or self.postnote:
+        return citep.citation(self, full=full, capitalize=capitalize)
+        #return citet.citation(self, full=full, capitalize=capitalize)
 
 class Cite(cite):
 

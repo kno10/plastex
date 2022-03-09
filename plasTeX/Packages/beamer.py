@@ -416,9 +416,5 @@ class addheadbox(Command):
 class addfootbox(Command):
     args = 'color template'
 
-from plasTeX.Base.LaTeX.Verbatim import verb
-class note(verb):
-    def invoke(self, tex):
-        verb.invoke(self, tex)
-        return []
-
+class note(Command):
+    args = 'self'

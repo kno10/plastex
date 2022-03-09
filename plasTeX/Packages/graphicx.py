@@ -1,5 +1,5 @@
 import os, re
-from plasTeX import Command
+from plasTeX import Command, log, TeXFragment
 
 from plasTeX.Packages.graphics import DeclareGraphicsExtensions as DeclareGraphicsExtensions_
 from plasTeX.Packages.graphics import graphicspath as graphicspath_
@@ -46,7 +46,9 @@ class includegraphics(Command):
             scale = options.get('scale')
             if scale:
                 scale = float(scale)
-                if img.endswith('.svg'):
+                if img.endswith('.pdf'):
+                   w, h = 300, 300 ## FIXME: get pdf size
+                elif img.endswith('.svg'):
                     import xml.etree.ElementTree as ET
                     attrs = ET.parse(img).getroot().attrib
                     w = int(attrs.get('width', 300))
@@ -57,13 +59,20 @@ class includegraphics(Command):
                 self.style['width'] = '%spx' % (w * scale)
                 self.style['height'] = '%spx' % (h * scale)
 
-            height = options.get('height')
-            if height is not None:
-                self.style['height'] = height
+            def convert(v):
+                if isinstance(v, TeXFragment):
+                    m = re.match(r"^\s*(\d*\.?\d+|\d+\.?)\s*\\(line|column|text)(width|height)\s*$", v.source)
+                    if m: return "{}%".format(float(m.group(1))*100)
+                return v
 
+            height = options.get('height')
             width = options.get('width')
+            #log.warning("Height: {} width: {}".format(height.source if isinstance(height, TeXFragment) else height, width.source if isinstance(width, TeXFragment) else None))
+            if height is not None:
+                self.style['height'] = convert(height)
+
             if width is not None:
-                self.style['width'] = width
+                self.style['width'] = convert(width)
 
             def getdimension(s):
                 m = re.match(r'^([\d\.]+)\s*([a-z]*)$', s)

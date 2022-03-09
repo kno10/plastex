@@ -1,5 +1,15 @@
-name: frametitle
-<h2>{{ obj }}</h2>
+name: frame frameenv
+<section class="frame">
+{% if obj.title %}<h2 class="frametitle">{{ obj.title }}</h2>{% endif %}
+{% if obj.subtitle %}<h3 class="framesubtitle">{{ obj.subtitle }}</h3>{% endif %}
+{{ obj }}
+</section>
 
-name: framesubtitle
-<h3>{{ obj }}</h3>
+name: frametitle framesubtitle
+{# via frame #}
+
+name: note
+{# omit #}
+
+name: only visible
+<span class="fragment" data-fragment-index="{{ obj.overlay }}">{{ obj }}</span>

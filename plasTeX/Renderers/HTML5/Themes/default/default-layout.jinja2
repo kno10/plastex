@@ -19,9 +19,9 @@
 {% if config.html5['use-mathjax'] %}
 <script>
   MathJax = { 
-    loader: {load: ['[tex]/mathtools', '[tex]/ams', '[tex]/textmacros', '[tex]/textcomp']},
+    loader: {load: ['[tex]/mathtools', '[tex]/ams', '[tex]/textmacros', '[tex]/textcomp', '[tex]/centernot']},
     tex: {
-	packages: {'[+]': ['mathtools','ams','textmacros']},
+	packages: {'[+]': ['mathtools','ams','textmacros', 'centernot']},
 	textmacros: { packages: {'[+]': ['textcomp']} },
 {% if config.html5['mathjax-dollars'] %}
 		    inlineMath: [['$','$'], ['\\(','\\)']],
