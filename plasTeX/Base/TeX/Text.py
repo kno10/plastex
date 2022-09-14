@@ -99,7 +99,8 @@ class repeat(Command):
     str = ''
 
 class enskip(Command):
-    pass
+    def mathjax_source(self):
+        return r"\enspace"
 
 class enspace(Command):
     pass
