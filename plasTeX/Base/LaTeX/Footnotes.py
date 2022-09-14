@@ -7,7 +7,7 @@ from plasTeX import Command, DimenCommand
 
 
 class footnote(Command):
-    args = '[ num:int ] self'
+    args = '< overlay > [ num:int ] self'
     mark = None
 
     def invoke(self, tex):
@@ -21,7 +21,7 @@ class footnote(Command):
         return output
 
 class footnotemark(Command):
-    args = '[ num:int ]'
+    args = '< overlay > [ num:int ]'
     mark = None
 
     def invoke(self, tex):
@@ -35,7 +35,7 @@ class footnotemark(Command):
         return output
 
 class footnotetext(footnote):
-    args = '[ num:int ] self'
+    args = '< overlay > [ num:int ] self'
     mark = None
     
     def invoke(self, tex):
