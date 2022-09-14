@@ -59,20 +59,19 @@ class includegraphics(Command):
                 self.style['width'] = '%spx' % (w * scale)
                 self.style['height'] = '%spx' % (h * scale)
 
-            def convert(v):
+            def _convert(v):
+                import re
                 if isinstance(v, TeXFragment):
-                    m = re.match(r"^\s*(\d*\.?\d+|\d+\.?)\s*\\(line|column|text)(width|height)\s*$", v.source)
-                    if m: return "{}%".format(float(m.group(1))*100)
+                    m = re.match(r"^\s*(\d*\.?\d+|\d+\.?)?\s*\\(line|column|text)(width|height)\s*$", v.source)
+                    if m and m.group(1): return "%d%%" % float(m.group(1))*100
+                    if m: return "100%"
                 return v
 
             height = options.get('height')
             width = options.get('width')
             #log.warning("Height: {} width: {}".format(height.source if isinstance(height, TeXFragment) else height, width.source if isinstance(width, TeXFragment) else None))
-            if height is not None:
-                self.style['height'] = convert(height)
-
-            if width is not None:
-                self.style['width'] = convert(width)
+            if height is not None: self.style['height'] = _convert(height)
+            if width is not None: self.style['width'] = _convert(width)
 
             def getdimension(s):
                 m = re.match(r'^([\d\.]+)\s*([a-z]*)$', s)
@@ -82,7 +81,7 @@ class includegraphics(Command):
                     return int(m.group(1)), m.group(2)
 
             keepaspectratio = options.get('keepaspectratio')
-            if img is not None and keepaspectratio == 'true' and \
+            if False and img is not None and keepaspectratio == 'true' and \
                height is not None and width is not None:
                 from PIL import Image
                 w, h = Image.open(img).size

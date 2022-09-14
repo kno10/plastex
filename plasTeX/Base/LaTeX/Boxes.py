@@ -6,10 +6,25 @@ C.13.3 Boxes (p217)
 from plasTeX.Base.TeX.Primitives import BoxCommand
 from plasTeX import Command, Environment
 from plasTeX import DimenCommand, GlueCommand
+from plasTeX import TeXFragment, log
 
+def _convert(v):
+    import re
+    if isinstance(v, TeXFragment):
+        m = re.match(r"^\s*(\d*\.?\d+|\d+\.?)?\s*\\(line|column|text)(width|height)\s*$", v.source)
+        if m and m.group(1): return "%d%%" % float(m.group(1))*100
+        if m: return "100%"
+    return v
 
 class TextBoxCommand(Command):
-
+    def invoke(self, tex):
+        res = Command.invoke(self, tex)
+        height = self.attributes.get("height")
+        width = self.attributes.get("width")
+        #log.warning("Height: {} width: {}".format(height.source if isinstance(height, TeXFragment) else height, width.source if isinstance(width, TeXFragment) else None))
+        if height is not None: self.style['height'] = _convert(height)
+        if width is not None: self.style['width'] = _convert(width)
+        return res
     class width(DimenCommand):
         value = DimenCommand.new(0)
  
@@ -55,6 +70,15 @@ class parbox(Command):
 
 class minipage(Environment):
     args = '[ pos:str ] [ height:dimen ] [ innerpos:str ] width:dimen'
+
+    def invoke(self, tex):
+        res = Environment.invoke(self, tex)
+        height = self.attributes.get("height")
+        width = self.attributes.get("width")
+        #log.warning("Height: {} width: {}".format(height.source if isinstance(height, TeXFragment) else height, width.source if isinstance(width, TeXFragment) else None))
+        if height is not None: self.style['height'] = _convert(height)
+        if width is not None: self.style['width'] = _convert(width)
+        return res
 
 class rule(Command):
     args = '[ raise:dimen ] width:dimen height:dimen'

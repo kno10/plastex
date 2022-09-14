@@ -1,13 +1,13 @@
 name: mbox makebox
-<span class="mbox" style="width: {{ obj.attributes.width }}">{{ obj }}</span>
+<span class="mbox" style="{{ obj.style.inline }}">{{ obj }}</span>
 
 name: fbox framebox
-<span class="fbox" style="width: {{ obj.attributes.width }}">{{ obj }}</span>
+<span class="fbox" style="{{ obj.style.inline }}">{{ obj }}</span>
 
 name: parbox
-<span class="parbox" style="width: {{ obj.attributes.width }}">{{ obj }}</span>
+<span class="parbox" style="{{ obj.style.inline }}">{{ obj }}</span>
 
 name: minipage
-<div class="minipage" style="width: {{ obj.attributes.width }}">{{ obj }}</div>
+<div class="minipage" style="{{ obj.style.inline }}">{{ obj }}</div>
 
 name: raisebox rule
