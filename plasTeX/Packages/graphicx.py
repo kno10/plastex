@@ -1,5 +1,5 @@
 import os, re
-from plasTeX import Command, log, TeXFragment
+from plasTeX import Command, log, TeXFragment, Element
 
 from plasTeX.Packages.graphics import DeclareGraphicsExtensions as DeclareGraphicsExtensions_
 from plasTeX.Packages.graphics import graphicspath as graphicspath_
@@ -59,19 +59,21 @@ class includegraphics(Command):
                 self.style['width'] = '%spx' % (w * scale)
                 self.style['height'] = '%spx' % (h * scale)
 
-            def _convert(v):
+            def _convert(v, u="%"):
                 import re
+                if isinstance(v, Element):
+                    if re.match(r"^(line|column|text)(width|height)$", v.nodeName): return "100"+u
                 if isinstance(v, TeXFragment):
                     m = re.match(r"^\s*(\d*\.?\d+|\d+\.?)?\s*\\(line|column|text)(width|height)\s*$", v.source)
-                    if m and m.group(1): return "%d%%" % float(m.group(1))*100
-                    if m: return "100%"
+                    if m and m.group(1): return "%d%s" % (float(m.group(1))*100, u)
+                    if m: return "100"+u
                 return v
 
             height = options.get('height')
             width = options.get('width')
-            #log.warning("Height: {} width: {}".format(height.source if isinstance(height, TeXFragment) else height, width.source if isinstance(width, TeXFragment) else None))
-            if height is not None: self.style['height'] = _convert(height)
-            if width is not None: self.style['width'] = _convert(width)
+            if height is not None: self.style['height'] = _convert(height, "vh")
+            if width is not None: self.style['width'] = _convert(width, "%")
+            #log.warning("Height: {} width: {} -> h: {} w: {}".format(height.source if isinstance(height, TeXFragment) else height, width.source if isinstance(width, TeXFragment) else width, self.style.get("height"), self.style.get("width")))
 
             def getdimension(s):
                 m = re.match(r'^([\d\.]+)\s*([a-z]*)$', s)
@@ -81,7 +83,7 @@ class includegraphics(Command):
                     return int(m.group(1)), m.group(2)
 
             keepaspectratio = options.get('keepaspectratio')
-            if False and img is not None and keepaspectratio == 'true' and \
+            if img is not None and keepaspectratio == 'true' and \
                height is not None and width is not None:
                 from PIL import Image
                 w, h = Image.open(img).size
