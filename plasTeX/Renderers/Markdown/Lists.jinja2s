@@ -1,0 +1,18 @@
+name: itemize
+{%- macro render(x) %}{{ x }}{% endmacro -%}
+{{ "\n" }}{%- for item in obj -%}
+- {{ render(item) |indent(2, False) }}
+{%- endfor -%}
+
+name: enumerate
+{%- macro render(x) %}{{ x }}{% endmacro -%}
+{{ "\n" }}{%- for item in obj -%}
+1. {{ render(item) |indent(2, False)}}
+{%- endfor -%}
+
+name: list trivlist description
+{%- macro render(x) %}{{ x }}{% endmacro -%}
+{{ "\n" }}{%- for item in obj -%}
+- **{{ item.attributes.term or obj.attributes.defaultlabel |indent(2, False) }}**  
+  {{ render(item) |indent(2, True) }}
+{%- endfor -%}

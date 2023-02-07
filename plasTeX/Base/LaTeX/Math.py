@@ -55,7 +55,8 @@ class MathEnvironmentPre(MathEnvironment):
 
 def mathjax_lt_gt(s: str) -> str:
     """Help mathjax deal with < and >, see http://docs.mathjax.org/en/latest/input/tex/html.html?highlight=lt#html-special-characters."""
-    return s.replace('<', r'&lt;').replace('>', r'&gt;') #.replace('\\ensuremath','')
+    return s.replace('<', r'{\lt}').replace('>', r'{\gt}')
+    #return s.replace('<', r'&lt;').replace('>', r'&gt;')
 
 class math(MathEnvironment):
     @property
@@ -76,7 +77,7 @@ class displaymath(MathEnvironment):
     @property
     def source(self):
         if self.hasChildNodes():
-            return r'\[ %s \]' % sourceChildren(self)
+            return r'\[ %s \]' % sourceChildren(self).strip("\n")
         if self.macroMode == Command.MODE_END:
             return r'\]'
         return r'\['

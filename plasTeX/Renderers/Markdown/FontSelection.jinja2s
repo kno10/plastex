@@ -1,0 +1,90 @@
+name: mdseries textmd
+<span class="mdseries">{{ obj }}</span>
+
+name: bfseries textbf
+**{{ obj }}**
+
+name: rmfamily textrm
+<span class="rmfamily">{{ obj }}</span>
+
+name: sffamily textsf
+<span class="sffamily">{{ obj }}</span>
+
+name: ttfamily texttt
+`{{ obj }}`
+
+name: upshape textup
+<span class="upshape">{{ obj }}</span>
+
+name: itshape textit
+*{{ obj }}*
+
+name: slshape textsl
+*{{ obj }}*
+
+name: scshape textsc
+<span class="scshape">{{ obj }}</span>
+
+name: textnormal
+{{ obj }}
+
+name: rm
+<span class="rm">{{ obj }}</span>
+
+name: cal
+<i class="cal">{{ obj }}</i>
+
+name: it
+*{{ obj }}*
+
+name: sl
+*{{ obj }}*
+
+name: bf
+**{{ obj }}**
+
+name: tt
+`{{ obj }}`
+
+name: sc
+<i class="sc">{{ obj }}</i>
+
+name: sout
+<span class="strike">{{ obj }}</span>
+
+name: tiny
+<small class="tiny">{{ obj }}</small>
+
+name: scriptsize
+<small class="scriptsize">{{ obj }}</small>
+
+name: footnotesize
+<small class="footnotesize">{{ obj }}</small>
+
+name: small
+<small class="small">{{ obj }}</small>
+
+name: normalsize
+<span class="normalsize">{{ obj }}</span>
+
+name: large
+<big class="large">{{ obj }}</big>
+
+name: Large
+<big class="xlarge">{{ obj }}</big>
+
+name: LARGE
+<big class="xxlarge">{{ obj }}</big>
+
+name: huge
+<big class="huge">{{ obj }}</big>
+
+name: Huge
+<big class="xhuge">{{ obj }}</big>
+
+
+name: symbol
+{% if obj.renderer.vectorImager.enabled %}
+<object type="image/svg+xml" data="{{ obj.vectorImage.url }}" style="width: {{ obj.vectorImage.width.em }}; height: {{ obj.vectorImage.height.em }} vertical-align: {{ obj.vectorImage.depth.em }}">
+  <img src="obj.image.url" alt="{{ obj.source }}" style="vertical-align: {{ obj.image.depth.px }}; width:{{obj.image.width.px}}; height:{{obj.image.height.px}}" class="symbol gen" />
+</object>

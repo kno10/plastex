@@ -417,6 +417,7 @@ class Macro(Element):
             name = name.split('::').pop()
             escape = ''
 
+
         # \begin environment
         # If self.childNodes is not empty, print out the entire environment
         if self.macroMode == Macro.MODE_BEGIN:

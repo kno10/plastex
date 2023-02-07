@@ -67,4 +67,9 @@ class iflanguage(Command):
         if self.ownerDocument.context.currentLanguage == self.attributes['lang']:
             return self.attributes['yes']
         return self.attributes['no']
-        
+
+class hyphenrules(Environment):
+    args = 'rules:str'
+
+class hyphenrule(Command):
+    args = 'lang:str'

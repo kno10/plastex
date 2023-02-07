@@ -54,8 +54,13 @@ else:
                      'context':obj.ownerDocument.context,
                      'templates':obj.renderer,
                      'tpl_src': s}
-
-            tpl = env.from_string(s)
+            try:
+                tpl = env.template_class.from_code(env, env.compile(s, filename=obj.nodeName), env.make_globals(None), None)
+            except jinja2.exceptions.TemplateError as e:
+                log.exception('Jinja2 template error: {} while rendering node {}'
+                            ' using template  source\n {}\n'.format(
+                            e, obj.nodeName, s))
+                return ''
             try:
                 return tpl.render(tvars)
             except jinja2.exceptions.TemplateError as e:

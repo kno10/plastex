@@ -1,0 +1,24 @@
+name: default default-layout document-layout document
+{% if title -%}
+{{ "title:" }} {{ obj.title }}
+{% endif -%}
+{% if obj.links -%}
+{% if obj.links.next.url -%}
+{{ "next:" }} {{ obj.links.next.url }}
+{% endif -%}
+{% if obj.links.prev.url -%}
+{{ "prev:" }} {{ obj.links.prev.url }}
+{% endif -%}
+{% if obj.links.up.url -%}
+{{ "up:" }} {{ obj.links.up.url }}
+{% endif -%}
+{%- endif -%}
+{#- also use obj.links.*.title.textContent? -#}
+---
+{{ obj }}
+
+{%- if obj.footnotes %}
+{% for footnote in obj.footnotes -%}
+[^{{ footnote.id}}]: {{ footnote }}
+{% endfor -%}
+{% endif -%}

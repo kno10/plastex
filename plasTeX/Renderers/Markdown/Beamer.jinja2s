@@ -1,0 +1,22 @@
+name: frame frameenv
+{% if obj.title -%}
+{{ "##" }} {{ obj.title }}
+{% endif -%}
+{% if obj.subtitle -%}
+{{ "###" }} {{ obj.subtitle }}
+{% endif -%}
+
+{{ obj }}
+---
+
+name: frametitle framesubtitle
+{#- inserted via frame -#}
+
+name: note
+{#- omit. TODO: retain as additional text? -#}
+
+name: only visible
+<span class="fragment" data-fragment-index="{{ obj.overlay }}">{{ obj }}</span>
+
+name: onlyenv
+<div class="fragment" data-fragment-index="{{ obj.overlay }}">{{ obj }}</div>

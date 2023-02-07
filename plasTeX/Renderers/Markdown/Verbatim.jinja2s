@@ -1,0 +1,7 @@
+name: verbatim
+```
+{{ obj }}
+```
+
+name: verb
+`{{ obj}}`

@@ -1,0 +1,49 @@
+name: abstract
+{{ obj }}
+
+name: title author date thanks
+
+name: maketitle
+{%- set metadata=obj.ownerDocument.userdata %}
+# metadata.title
+{% if metadata.author -%}
+{% for author in metadata.author %}{{ author }}{{ ", " if not loop.last else "" }}{% endfor %}
+{% endif -%}
+{% if metadata.date -%}
+{{ metadata.date }}
+{% endif -%}
+{% if metadata.thanks -%}
+{{ metadata.thanks }}
+{% endif -%}
+
+name: document
+{{ obj }}
+
+name: part chapter section
+# {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+{{ obj }}
+
+
+name: subsection 
+## {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+{{ obj }}
+
+
+name: subsubsection
+### {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+{{ obj }}
+
+
+name: paragraph
+#### {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+{{ obj }}
+
+
+name: subparagraph
+##### {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+{{ obj }}
+
+
+name: subsubparagraph
+###### {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+{{ obj }}

@@ -1,0 +1,11 @@
+name: math
+{{ obj.mathjax_source }}
+
+name: ensuremath
+\({{ obj.mathjax_source }}\)
+
+name: displaymath equation* eqnarray eqnarray* align align* gather gather* flalign flalign* multline multline* alignat alignat* split
+{{ obj.mathjax_source }}{{ '{#' }}{{ obj.id}}}
+
+name: equation
+\[{{ obj.mathjax_source }} \tag{{{ obj.ref }}}\]{{ '{#' }}{{ obj.id}}}

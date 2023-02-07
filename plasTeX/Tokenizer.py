@@ -172,9 +172,9 @@ class Other(Token):
 class Tokenizer(object):
 
     # Tokenizer states
-    STATE_S = 1
-    STATE_M = 2
-    STATE_N = 4
+    STATE_S = 1 # Whitespace?
+    STATE_M = 2 # main?
+    STATE_N = 4 # Newline?
 
     tokenClasses = [None] * 16 # type: List[Optional[Callable]]
     tokenClasses[Token.CC_BGROUP] = BeginGroup
@@ -392,7 +392,7 @@ class Tokenizer(object):
                     self.state = STATE_N
                     continue
                 elif state == STATE_M:
-                    token = Space(' ')
+                    token = Space('\n') # Space(' ')
                     code = CC_SPACE
                     self.state = STATE_N
                 elif state == STATE_N:
@@ -428,7 +428,7 @@ class Tokenizer(object):
                     elif next_code == CC_EOL:
                         #pushChar(token)
                         #token = EscapeSequence()
-                        token = Space(' ')
+                        token = Space('\n') # Space(' ')
                         self.state = STATE_S
 
                     else:

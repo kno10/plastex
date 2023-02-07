@@ -1,10 +1,13 @@
 """
-Implement the tikz package using the imager
+TODO: Implement the tikz package using the imager
 """
-from plasTeX import VerbatimEnvironment
-from plasTeX import Command
+from plasTeX import VerbatimEnvironment, Command, Environment
 
 class tikzpicture(VerbatimEnvironment):
+    pass
+
+
+class tikz(Command):
     pass
 
 class usetikzlibrary(Command):
