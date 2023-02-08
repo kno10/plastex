@@ -1,8 +1,8 @@
 name: par
 {% if obj.blockType %}
-{{ obj -}}{{- "\n\n" }}
+{{ obj }}{{- "\n\n" }}
 {% else %}{% if obj %}
-{{ obj }}
+{{ obj }}{{- "\n" }}
 {% endif %}
 {% endif %}
 

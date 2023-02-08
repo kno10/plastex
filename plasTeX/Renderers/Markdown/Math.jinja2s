@@ -1,11 +1,13 @@
 name: math
-{{ obj.mathjax_source }}
+{{ obj.mathjax_source | trim }}
 
 name: ensuremath
-\({{ obj.mathjax_source }}\)
+\({{ obj.mathjax_source | trim }}\)
 
 name: displaymath equation* eqnarray eqnarray* align align* gather gather* flalign flalign* multline multline* alignat alignat* split
-{{ obj.mathjax_source }}{{ '{#' }}{{ obj.id}}}
+comment: add id as anchor?
+{{ obj.mathjax_source | trim }}
 
 name: equation
-\[{{ obj.mathjax_source }} \tag{{{ obj.ref }}}\]{{ '{#' }}{{ obj.id}}}
+comment: add id as anchor? - does this even work here as desired?
+\[{{ obj.mathjax_source }} \tag{{{ obj.ref }}}\]

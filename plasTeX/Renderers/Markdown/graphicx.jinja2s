@@ -4,11 +4,12 @@ name: includegraphics rotatebox scalebox reflectbox resizebox
 {% else %}
 {% set image = obj.image %}
 {% endif %}
-{% if obj.style and obj.style.inline %}
-<img src="{{ obj.imageoverride }}" alt="{{ obj.source }}" style="{{ obj.style.inline }}" />
-{% else %}
-<img src="{{ obj.imageoverride }}" alt="{{ obj.source }}" style="width: {{ image.width.px }}; height: {{ image.height.px }}" />
-{% endif %}
+![{{ obj.source }}]({{ obj.imageoverride }})
+{%- if obj.style and obj.style.inline -%}
+{ style="{{ obj.style.inline }}" }
+{%- else -%}
+{ width={{ image.width.px }} height={{ image.height.px }} }
+{%- endif %}
 
 name: DeclareGraphicsExtensions graphicspath
 {# hide #}

@@ -1,13 +1,25 @@
 name: mbox makebox
-<span class="mbox" style="{{ obj.style.inline }}">{{ obj }}</span>
+<span class="mbox" {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}>{{ obj }}</span>
 
 name: fbox framebox
-<span class="fbox" style="{{ obj.style.inline }}">{{ obj }}</span>
+::: .fbox
+{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
+{%- if obj.width %} width="{{ "%.1f%%" % (100*obj.width) }}"{% endif %}
+{{ obj }}
+:::{{ "\n" -}}
 
 name: parbox
-<span class="parbox" style="{{ obj.style.inline }}">{{ obj }}</span>
+::: .parbox
+{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
+{%- if obj.width %} width="{{ "%.1f%%" % (obj.width) }}"{% endif %}
+{{ obj }}
+:::{{ "\n" -}}
 
 name: minipage
-<div class="minipage" style="{{ obj.style.inline }}">{{ obj }}</div>
+::: .minipage
+{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
+{%- if obj.width %} width="{{ "%.1f%%" % (obj.width) }}"{% endif %}
+{{ obj }}
+:::{{ "\n" -}}
 
 name: raisebox rule

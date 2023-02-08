@@ -1,11 +1,17 @@
 name: columns
-{#- strip spaces #}
-<div class="columns">
-{{ obj }}
-</div>
+{{- "\n" -}}
+:::: .columns
+{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
+{%- if obj.attributes.totalwidth %}{%- macro render(x) %}{{ x }}{% endmacro -%} width="{{ (render(obj.attributes.totalwidth)|float)*100 |round }}%"{% endif %}
+{{- "\n" -}}
+{{ obj | trim("\n") }}
+::::{{ "\n" -}}
 
 name: column columnenv
-{#- strip spaces #}
-<div class="col">
-{{ obj }}
-</div>
+{{- "\n" -}}
+::: .col
+{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
+{%- if obj.attributes.width %}{%- macro render(x) %}{{ x }}{% endmacro -%} width="{{ (render(obj.attributes.width)|float)*100 |round }}%"{% endif %}
+{{- "\n" -}}
+{{ obj | trim("\n") }}
+:::{{ "\n" -}}
