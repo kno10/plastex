@@ -6,8 +6,8 @@ from plasTeX import VerbatimEnvironment, Command, Environment
 class tikzpicture(VerbatimEnvironment):
     pass
 
-
 class tikz(Command):
+    args = "[ options:str ] self"
     pass
 
 class usetikzlibrary(Command):

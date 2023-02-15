@@ -20,30 +20,30 @@ name: document
 {{ obj }}
 
 name: part chapter section
-# {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+# {{ obj.title }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
 {{ obj }}
 
 
 name: subsection 
-## {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+## {{ obj.title }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
 {{ obj }}
 
 
 name: subsubsection
-### {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+### {{ obj.title }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
 {{ obj }}
 
 
 name: paragraph
-#### {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+#### {{ obj.title }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
 {{ obj }}
 
 
 name: subparagraph
-##### {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+##### {{ obj.title }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
 {{ obj }}
 
 
 name: subsubparagraph
-###### {{ obj.fullTitle }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
+###### {{ obj.title }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
 {{ obj }}

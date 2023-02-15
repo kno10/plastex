@@ -1,4 +1,4 @@
-name: tikzpicture tikz
+name: algorithm
 ![]({{ obj.image }})
 ```tex
 {{ obj.source }}

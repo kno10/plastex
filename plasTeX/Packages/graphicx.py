@@ -111,3 +111,8 @@ class DeclareGraphicsExtensions(DeclareGraphicsExtensions_):
 
 class graphicspath(graphicspath_):
     packageName = 'graphicx'
+
+class rotatebox(Command):
+    args = '[ options:dict ] angle:float self'
+    packageName = 'graphicx'
+

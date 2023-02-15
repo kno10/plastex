@@ -1901,7 +1901,7 @@ class definecolor(ColorCommand):
             self.parser.colors[a['name']] = self.parser.parseColor(a['color'], a['model'])
     
     @property
-    def source(self)->str:
+    def Xsource(self)->str:
         r"""Rewrite the source tex to ignore the \definecolor command.
 
         This allows one to define colors in a math expression, even when source

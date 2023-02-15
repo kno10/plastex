@@ -873,6 +873,22 @@ width 2pt\hskip2pt}}{}
                     if os.path.splitext(name)[1].lower() == '.svg':
                         shutil.copyfile(name, path)
                         width = height = None
+                    elif os.path.splitext(name)[1].lower() == '.pdf':
+                        import subprocess
+                        subprocess.run(['pdf2svg', name, path], stdout=subprocess.DEVNULL, check=True)
+                        scale = self.get_scale(node.nodeName)
+                        if scale != 1:
+                            import xml.etree.ElementTree as ET
+                            tree = ET.parse(filename)
+                            root = tree.getroot()
+                            for attrib in ["width", "height"]:
+                                m = length_re.match(root.attrib[attrib])
+                                if m is None:
+                                    raise ValueError
+                                root.attrib[attrib] = "{:.2f}{}".format(float(m.group(1)) * scale, m.group(2))
+
+                            tree.write(filename)
+                        width = height = None
                     else:
                         img = PILImage.open(name)
                         width, height = img.size
@@ -901,10 +917,12 @@ width 2pt\hskip2pt}}{}
 
         # If anything fails, just let the imager handle it...
         except Exception as msg:
-            log.warning('%s in image "%s".  Reverting to LaTeX to generate the image.' % (msg, name))
+            log.warning('%s in image "%s".  Reverting to LaTeX to generate the image.' % (msg, name), exc_info=True)
             pass
         return self.newImage(node)
 
+    def set_basename(self, basename):
+        self.newFilename.variables["basename"] = os.path.splitext(str(basename))[0]
 
 class VectorImager(Imager):
     fileExtension = '.svg'

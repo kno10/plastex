@@ -1,13 +1,16 @@
 name: includegraphics rotatebox scalebox reflectbox resizebox
+{% if obj.imageoverride.endswith('.svg') and obj.renderer.vectorImager.enabled %}
+{% set image = obj.vectorImage %}
+{% elif obj.imageoverride.endswith('.pdf') and obj.renderer.vectorImager.enabled %}
+{% set image = obj.vectorImage %}
+{% else %}
+{% set image = obj.image %}
+{% endif %}
 ![{{ obj.source }}]({{ obj.imageoverride }})
 {%- if obj.style and obj.style.inline -%}
 { style="{{ obj.style.inline }}" }
 {%- else -%}
-  {%- if obj.imageoverride and obj.imageoverride.endswith('.svg') and obj.renderer.vectorImager.enabled %}
-    { width={{ obj.vectorImage.width.px }} height={{ obj.vectorImage.height.px }} }
-  {%- elif obj.image -%}
-    { width={{ obj.image.width.px }} height={{ obj.image.height.px }} }
-  {%- endif %}
+  { width={{ image.width.px }} height={{ image.height.px }} }
 {%- endif %}
 
 name: DeclareGraphicsExtensions graphicspath

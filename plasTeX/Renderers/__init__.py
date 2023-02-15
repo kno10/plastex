@@ -167,6 +167,9 @@ class Renderable(object):
             # Locate the rendering callable, and call it with the
             # current object (i.e. `child`) as its argument.
             func = r.find(names, r.default)
+            if child.filename:
+                if Node.renderer.imager: Node.renderer.imager.set_basename(os.path.basename(child.filename))
+                if Node.renderer.vectorImager: Node.renderer.vectorImager.set_basename(os.path.basename(child.filename))
             val = func(child)
 
             # If a plain string is returned, we have no idea what
@@ -221,15 +224,23 @@ class Renderable(object):
     @property
     def image(self):
         """ Generate an image and return the image filename """
-        return Node.renderer.imager.getImage(self)
+        try:
+            return Node.renderer.imager.getImage(self)
+        except Exception as ex:
+            log.warning("Exception in imager: {}".format(ex), exc_info=True)
+            return None
 
     @property
     def vectorImage(self):
         """ Generate a vector image and return the image filename """
-        image = Node.renderer.vectorImager.getImage(self)
-        if Node.renderer.vectorBitmap:
-            image.bitmap = Node.renderer.imager.getImage(self)
-        return image
+        try:
+            image = Node.renderer.vectorImager.getImage(self)
+            if Node.renderer.vectorBitmap:
+                image.bitmap = Node.renderer.imager.getImage(self)
+            return image
+        except Exception as ex:
+            log.warning("Exception in vectorImager: {}".format(ex), exc_info=True)
+            return None
 
     @property
     def url(self):
