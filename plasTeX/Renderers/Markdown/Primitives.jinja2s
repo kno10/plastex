@@ -7,7 +7,7 @@ name: par
 {% endif %}
 
 name: active::^
-<sup>{{ obj }}</sup>
+^{{ obj }}^
 
 name: active::_
-<sub>{{ obj }}</sub>
+~{{ obj }}~

@@ -47,41 +47,40 @@ name: tt
 `{{ obj }}`
 
 name: sc
-<i class="sc">{{ obj }}</i>
+[{{ obj }}]{.smallcaps}
 
 name: sout
 ~~{{ obj }}~~
 
 name: tiny
-<small class="tiny">{{ obj }}</small>
+[{{ obj }}]{.tiny}
 
 name: scriptsize
-<small class="scriptsize">{{ obj }}</small>
+[{{ obj }}]{.scriptsize}
 
 name: footnotesize
-<small class="footnotesize">{{ obj }}</small>
+[{{ obj }}]{.footnotesize}
 
 name: small
-<small class="small">{{ obj }}</small>
+[{{ obj }}]{.small}
 
 name: normalsize
 <span class="normalsize">{{ obj }}</span>
 
 name: large
-<big class="large">{{ obj }}</big>
+[{{ obj }}]{.large}
 
 name: Large
-<big class="xlarge">{{ obj }}</big>
+[{{ obj }}]{.xlarge}
 
 name: LARGE
-<big class="xxlarge">{{ obj }}</big>
+[{{ obj }}]{.xxlarge}
 
 name: huge
-<big class="huge">{{ obj }}</big>
+[{{ obj }}]{.huge}
 
 name: Huge
-<big class="xhuge">{{ obj }}</big>
-
+[{{ obj }}]{.xhuge}
 
 name: symbol
 {% if obj.renderer.vectorImager.enabled %}

@@ -12,8 +12,8 @@ class Markdown(_Renderer):
     """Renderer targetting Markdown."""
 
     fileExtension = '.md'
-    imageTypes = ['.svg', '.png','.jpg','.jpeg','.gif', '.pdf']
-    vectorImageTypes = ['.svg', '.pdf']
+    imageTypes = ['.svg', '.png','.jpg','.jpeg','.gif']
+    vectorImageTypes = ['.svg']
     vectorBitmap = False
 
     def loadTemplates(self, document):

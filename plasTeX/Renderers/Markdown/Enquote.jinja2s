@@ -1,2 +1,4 @@
-name: enquote
-"{{ self }}"
+name: enquote foreignquote
+{%- macro level(p) -%}{{- (level(p.parentNode)|int if p.parentNode else 0) + (1 if p.nodeName == "enquote" else 0) -}}{%- endmacro -%}
+{%- if level(obj)|int % 2 == 1 -%}“{{ obj }}”{%- else -%}‘{{ obj }}’{%- endif -%}
+

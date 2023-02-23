@@ -13,10 +13,20 @@ name: frametitle framesubtitle
 {#- inserted via frame -#}
 
 name: note
-{#- omit. TODO: retain as additional text? -#}
+::: notes
+{{ obj }}
+:::
 
 name: only visible
-<span class="fragment" data-fragment-index="{{ obj.overlay }}">{{ obj }}</span>
+{{- "\n" -}}
+:::: { .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif -%} }
+{{- "\n\n" -}}
+{{- obj -}}
+{{- "\n\n::::\n" -}}
 
-name: onlyenv
-<div class="fragment" data-fragment-index="{{ obj.overlay }}">{{ obj }}</div>
+name: onlyenv visibleenv
+{{- "\n" -}}
+:::: { .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif -%} }
+{{- "\n\n" -}}
+{{- obj -}}
+{{- "\n\n:::::\n" -}}

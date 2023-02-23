@@ -1,7 +1,6 @@
-name: cite citet citep citealt citealp citeauthor citeyear citeyearpar \
+name: Xcite citet citep citealt citealp citeauthor citeyear citeyearpar \
       Cite Citet Citep Citealt Citealp Citeauthor citefullauthor citetalias \
       citepalias
-type: xml
 <span class="cite">{{ obj.citation() }}</span>
 
 name: citetext
@@ -10,9 +9,9 @@ name: citetext
 name: nocite defcitealias
 
 name: newblock
- {# space -#}
+{{ " " }}
 
 name: fullcite
 {% for item in obj.bibitems -%}
-{{ item }}
+{{ item.bibcite }}
 {% endfor -%}

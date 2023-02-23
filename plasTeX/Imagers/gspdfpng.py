@@ -4,6 +4,7 @@ from plasTeX.Imagers import Imager as _Imager
 import plasTeX
 import glob, sys
 
+log = getLogger()
 status = getLogger('status')
 
 gs = 'gs'
@@ -35,8 +36,11 @@ class GSPDFPNG(_Imager):
                 status.info('[%s]' % filename,)
                 img = plasTeX.Imagers.autoCrop(PILImage.open(filename),
                                                margin=3)[0]
-                width, height = [int(float(x)/scaledown) for x in img.size]
-                img = img.resize((width, height), resampling)
+                if sum(img.size) < 10:
+                    log.warning("Image {} has degenerated to size {} x {}".format(filename, *img.size))
+                else:
+                    width, height = [max(1,int(float(x)/scaledown)) for x in img.size]
+                    img = img.resize((width, height), resampling)
                 img = img.point(self.toWhite)
                 img.save(filename)
 

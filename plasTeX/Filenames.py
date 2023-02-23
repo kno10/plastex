@@ -139,7 +139,7 @@ class Filenames(object):
 
     def _newFilename(self):
         """ Generator that generates new filenames """
-        g = self.variables.copy()
+        #g = self.variables.copy()
 
         # Split filenames into static and wildcard groups
         static = []
@@ -190,8 +190,8 @@ class Filenames(object):
                 result = string.Template(item).substitute(currentns)
                 if 'num' in currentns:
                     num += 1
-                self.variables.clear()
-                self.variables.update(g)
+                #self.variables.clear()
+                #self.variables.update(g)
                 result = self.addExtension(result)
                 if result not in self.invalid:
                     self.invalid[result] = None
@@ -232,8 +232,8 @@ class Filenames(object):
                     result = string.Template(item).substitute(currentns)
                     if 'num' in currentns:
                         num += 1
-                    self.variables.clear()
-                    self.variables.update(g)
+                    #self.variables.clear()
+                    #self.variables.update(g)
                     result = self.addExtension(result)
                     if result not in self.invalid:
                         self.invalid[result] = None

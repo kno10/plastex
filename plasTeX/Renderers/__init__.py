@@ -152,6 +152,12 @@ class Renderable(object):
                 # Add nodeName to list
                 layouts.append('%s-layout' % nodeName)
 
+                # For naming of images:
+                if hasattr(child, 'id') and getattr(child, '@hasgenid', None) is None:
+                    if Node.renderer.imager: Node.renderer.imager.update_variables({'id': child.id})
+                    if Node.renderer.vectorImager: Node.renderer.vectorImager.update_variables({'id': child.id})
+
+
             # templateName
             if templateName:
                 names.append(templateName)
@@ -167,9 +173,6 @@ class Renderable(object):
             # Locate the rendering callable, and call it with the
             # current object (i.e. `child`) as its argument.
             func = r.find(names, r.default)
-            if child.filename:
-                if Node.renderer.imager: Node.renderer.imager.set_basename(os.path.basename(child.filename))
-                if Node.renderer.vectorImager: Node.renderer.vectorImager.set_basename(os.path.basename(child.filename))
             val = func(child)
 
             # If a plain string is returned, we have no idea what
@@ -320,6 +323,8 @@ class Renderable(object):
             ns = r.newFilename.variables
             if hasattr(self, 'id') and getattr(self, '@hasgenid', None) is None:
                 ns['id'] = self.id
+                if Node.renderer.imager: Node.renderer.imager.update_variables({'id': self.id})
+                if Node.renderer.vectorImager: Node.renderer.vectorImager.update_variables({'id': self.id})
             if hasattr(self, 'title'):
                 if hasattr(self.title, 'textContent'):
                     ns['title'] = self.title.textContent
@@ -397,6 +402,10 @@ class Renderer(dict):
         """
         # Using the side-effect of the filename property
         _ = node.filename
+        # For naming of images:
+        if hasattr(node, 'id') and getattr(node, '@hasgenid', None) is None:
+            if Node.renderer.imager: Node.renderer.imager.update_variables({'id': node.id})
+            if Node.renderer.vectorImager: Node.renderer.vectorImager.update_variables({'id': node.id})
         for child in node.childNodes:
             self.cacheFilenames(child)
 

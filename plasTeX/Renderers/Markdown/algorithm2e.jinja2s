@@ -1,5 +1,5 @@
 name: algorithm
-![]({{ obj.image }})
+![]({{ obj.vectorImage }})
 ```tex
 {{ obj.source }}
 ```{{ "\n" }}

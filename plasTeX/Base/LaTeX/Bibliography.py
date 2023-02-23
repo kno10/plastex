@@ -26,8 +26,10 @@ class bibliography(chapter):
         try:
             filename = tex.kpsewhich(tex.jobname+'.bbl')
             encoding = self.ownerDocument.config['files']['input-encoding']
+            log.info("Loading bibliography from {}".format(filename))
             with open(filename, encoding=encoding) as f:
                 tex.input(f.read())
+            doc = self.ownerDocument
         except OSError as msg:
             log.warning(msg)
 
@@ -54,7 +56,7 @@ class thebibliography(List):
             key = a['key']
             label = a.get('label')
             bibcites = doc.userdata.getPath('bibliography/bibcites', {})
-            if key not in list(bibcites.keys()):
+            if key not in bibcites:
                 if label is None:
                     label = doc.createDocumentFragment()
                     label.extend(self.ref)
@@ -115,7 +117,7 @@ class cite(Command):
         """ (Jones et al., 1990) """
         res = self.ownerDocument.createDocumentFragment()
         i = 0
-        res.append('[')
+        # res.append('[')
         for i, item in enumerate(self.bibitems):
             node = self.ownerDocument.createElement('bgroup')
             node.extend(item.bibcite)
@@ -127,7 +129,7 @@ class cite(Command):
                 if self.postnote:
                     res.append(', ')
                     res.append(self.postnote)
-                res.append(']')
+                #res.append(']')
         return res
 
 class nocite(Command):

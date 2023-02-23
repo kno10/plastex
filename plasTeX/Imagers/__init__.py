@@ -696,7 +696,7 @@ width 2pt\hskip2pt}}{}
             pickle.dump(self._cache, fh)
 
         if save_file:
-            log.warning("Imager temp files saved at {}".format(tempdir))
+            log.warning("Imager {} temp files saved at {}".format(type(self).__name__, tempdir))
         else:
             shutil.rmtree(str(tempdir), True)
 
@@ -873,22 +873,6 @@ width 2pt\hskip2pt}}{}
                     if os.path.splitext(name)[1].lower() == '.svg':
                         shutil.copyfile(name, path)
                         width = height = None
-                    elif os.path.splitext(name)[1].lower() == '.pdf':
-                        import subprocess
-                        subprocess.run(['pdf2svg', name, path], stdout=subprocess.DEVNULL, check=True)
-                        scale = self.get_scale(node.nodeName)
-                        if scale != 1:
-                            import xml.etree.ElementTree as ET
-                            tree = ET.parse(filename)
-                            root = tree.getroot()
-                            for attrib in ["width", "height"]:
-                                m = length_re.match(root.attrib[attrib])
-                                if m is None:
-                                    raise ValueError
-                                root.attrib[attrib] = "{:.2f}{}".format(float(m.group(1)) * scale, m.group(2))
-
-                            tree.write(filename)
-                        width = height = None
                     else:
                         img = PILImage.open(name)
                         width, height = img.size
@@ -901,6 +885,26 @@ width 2pt\hskip2pt}}{}
                         else:
                             shutil.copyfile(name, path)
 
+            elif oldext == ".pdf" and newext == ".svg" and os.path.getsize(name) < 500000: # TODO: make limit configurable?
+                import subprocess
+                cmd = ['pdf2svg', name, path]
+                if "page" in node.attributes: cmd.append(node.attributes["page"])
+                if "page" in node.attributes:
+                    log.warning("file {} parameters {} -> {}".format(name, node.attributes or None, cmd))
+                subprocess.run(cmd, check=True)
+                scale = self.get_scale(node.nodeName)
+                if scale != 1:
+                    import xml.etree.ElementTree as ET
+                    tree = ET.parse(filename)
+                    root = tree.getroot()
+                    for attrib in ["width", "height"]:
+                        m = length_re.match(root.attrib[attrib])
+                        if m is None:
+                            raise ValueError
+                        root.attrib[attrib] = "{:.2f}{}".format(float(m.group(1)) * scale, m.group(2))
+
+                    tree.write(filename)
+                width = height = None
             # If PIL is available, convert the image to the appropriate type
             else:
                 img = PILImage.open(name)
@@ -911,18 +915,21 @@ width 2pt\hskip2pt}}{}
                     height = int(height * scale)
                     img.resize((width,height))
                 img.save(path)
+            #print(name, "->", path, self.newFilename.variables.get("id"))
             img = Image(path, self.ownerDocument.config['images'], width=width, height=height)
             self.staticimages[name] = img
             return img
 
         # If anything fails, just let the imager handle it...
         except Exception as msg:
-            log.warning('%s in image "%s".  Reverting to LaTeX to generate the image.' % (msg, name), exc_info=True)
+            log.warning('%s in image "%s".  Reverting to LaTeX to generate the image.' % (msg, name))
             pass
         return self.newImage(node)
 
-    def set_basename(self, basename):
-        self.newFilename.variables["basename"] = os.path.splitext(str(basename))[0]
+    def update_variables(self, variables):
+        for k, v in variables.items():
+            #if not k in []: continue
+            self.newFilename.variables[k] = v
 
 class VectorImager(Imager):
     fileExtension = '.svg'

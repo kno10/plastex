@@ -2,24 +2,44 @@ name: mbox makebox
 <span class="mbox" {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}>{{ obj }}</span>
 
 name: fbox framebox
-::: .fbox
+{{- "\n" -}}
+::: { .fbox
+{%- set sole = obj.childNodes|first %}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} width="{{ "%.1f%%" % (100*obj.width) }}"{% endif %}
+{%- if obj.width %} width="{{ obj.width|string|float * 100 |round }}%"{% endif %}
 {{ obj }}
 :::{{ "\n" -}}
 
 name: parbox
-::: .parbox
+{{- "\n" -}}
+::: { .parbox
+{%- set sole = obj.childNodes|first %}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} width="{{ "%.1f%%" % (obj.width) }}"{% endif %}
-{{ obj }}
-:::{{ "\n" -}}
+{%- if obj.width %} width="{{ obj.width|string|float * 100 |round }}%"{% endif %}
+{{- " }\n\n" -}}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
+{{- obj.childNodes[0] | trim("\n") }}
+{%- else %}
+{{ obj | trim("\n") }}
+{%- endif -%}
+{{- "\n\n:::\n" -}}
 
 name: minipage
-::: .minipage
+{{- "\n" -}}
+::: { .minipage
+{%- set sole = obj.childNodes|first %}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} width="{{ "%.1f%%" % (obj.width) }}"{% endif %}
-{{ obj }}
-:::{{ "\n" -}}
+{%- if obj.width %} width="{{ obj.width|string|float * 100 |round }}%"{% endif %}
+{{- " }\n\n" -}}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
+{{- obj.childNodes[0] | trim("\n") }}
+{%- else %}
+{{ obj | trim("\n") }}
+{%- endif -%}
+{{- "\n\n:::\n" -}}
+
 
 name: raisebox rule

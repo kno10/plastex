@@ -47,17 +47,19 @@ class includegraphics(Command):
             if scale:
                 scale = float(scale)
                 if img.endswith('.pdf'):
-                   w, h = 300, 300 ## FIXME: get pdf size
+                   pass ## FIXME: get pdf size
                 elif img.endswith('.svg'):
                     import xml.etree.ElementTree as ET
                     attrs = ET.parse(img).getroot().attrib
                     w = int(attrs.get('width', 300))
                     h = int(attrs.get('height', 300))
+                    self.style['width'] = '%spx' % (w * scale)
+                    self.style['height'] = '%spx' % (h * scale)
                 else:
                     from PIL import Image
                     w, h = Image.open(img).size
-                self.style['width'] = '%spx' % (w * scale)
-                self.style['height'] = '%spx' % (h * scale)
+                    self.style['width'] = '%spx' % (w * scale)
+                    self.style['height'] = '%spx' % (h * scale)
 
             def _convert(v, u="%"):
                 import re
@@ -103,6 +105,7 @@ class includegraphics(Command):
                 self.style['height'] = '%s%s' % (height, hunit)
 
         self.imageoverride = img
+        self.imagefilesize = os.path.getsize(img)
 
         return res
 

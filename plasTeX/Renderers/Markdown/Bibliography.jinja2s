@@ -9,21 +9,22 @@ name: thebibliography
 name: bibliographystyle
 
 name: bibliography
-<div class="bibliography">
+::: bibliography
 <h1>{{ obj.title }}</h1>
 {{ obj }}
-</div>
+{{- "\n:::\n\n" -}
 
 name: cite
-<span class="cite">
-{% for item in obj.citation() %}
-  {% if item.idref and item.idref.bibitem.url %}
-  <a href="{{ item.idref.bibitem.url }}">{{ item }}</a>
-  {% else %}
-  {{ item }}
-  {% endif %}
-{% endfor %}
-</span>
+[
+{%- for item in obj.citation() -%}
+{%- if item.idref and item.idref.bibitem.url -%}
+[{{ item }}]({{item.idref.bibitem.url}})
+{%- else -%}
+{{ item }}
+{%- endif -%}
+{%- if not loop.last %}{{ " " }}{% endif -%}
+{%- endfor -%}
+]{.cite}
 
 name: bibliographyref
-<a href="{{ obj.idref.bibitem.url }}">{{ obj.idref.bibitem.bibcite }}</a>
+[{{ obj.idref.bibitem.bibcite }}]({{obj.idref.bibitem.url}})

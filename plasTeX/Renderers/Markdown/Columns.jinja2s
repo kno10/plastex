@@ -1,17 +1,23 @@
 name: columns
 {{- "\n" -}}
-:::: .columns
+::::: { .columns
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.attributes.totalwidth %}{%- macro render(x) %}{{ x }}{% endmacro -%} width="{{ (render(obj.attributes.totalwidth)|float)*100 |round }}%"{% endif %}
-{{- "\n" -}}
+{%- if obj.attributes.totalwidth %} width="{{ obj.attributes.totalwidth|string|float * 100 |round }}%"{% endif %}
+{{- " }\n" -}}
 {{ obj | trim("\n") }}
-::::{{ "\n" -}}
+{{- "\n:::::\n" -}}
 
 name: column columnenv
 {{- "\n" -}}
-::: .col
+:::: { .col
+{%- set sole = obj.childNodes|first %}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.attributes.width %}{%- macro render(x) %}{{ x }}{% endmacro -%} width="{{ (render(obj.attributes.width)|float)*100 |round }}%"{% endif %}
-{{- "\n" -}}
+{%- if obj.attributes.width %} width="{{ obj.attributes.width|string|float * 100 |round }}%"{% endif %}
+{{- " }\n\n" -}}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
+{{- obj.childNodes[0] | trim("\n") }}
+{%- else %}
 {{ obj | trim("\n") }}
-:::{{ "\n" -}}
+{%- endif -%}
+{{- "\n\n::::\n" -}}

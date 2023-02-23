@@ -1,5 +1,5 @@
 """
-TODO: Implement the tikz package using the imager
+Implement the tikz package using the imager
 """
 from plasTeX import VerbatimEnvironment, Command, Environment
 

@@ -1,5 +1,5 @@
 name: tikzpicture tikz
-![]({{ obj.image }})
+![]({{ obj.vectorImage }})
 ```tex
 {{ obj.source }}
 ```{{ "\n" }}
