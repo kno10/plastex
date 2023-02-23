@@ -464,11 +464,10 @@ class active(CountCommand):
     value = CountCommand.new(13)
 
 class advance(Command):
-    pass
-    #def invoke(self, tex):
-    #    tex.readArgument(type='Number')
-    #    tex.readKeyword(['by'])
-    #    tex.readArgument(type='Number')
+    def invoke(self, tex):
+        tex.readArgument(type='Tok')
+        tex.readKeyword(['by'])
+        tex.readArgument(type='dimen')
 
 class leavevmode(Command): pass
 
