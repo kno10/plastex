@@ -12,7 +12,7 @@ name: bibliography
 ::: bibliography
 <h1>{{ obj.title }}</h1>
 {{ obj }}
-{{- "\n:::\n\n" -}
+{{- "\n:::\n\n" -}}
 
 name: cite
 [
