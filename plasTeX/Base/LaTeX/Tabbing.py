@@ -17,7 +17,8 @@ class tabbing(Environment):
 
     class EndRow(Command):
         macroName = '\\'
-   
+        args = '* [ len:dimen ]'
+
     class kill(Command):
         pass
 
