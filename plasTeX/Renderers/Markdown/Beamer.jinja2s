@@ -19,14 +19,14 @@ name: note
 
 name: only visible
 {{- "\n" -}}
-:::: { .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif -%} }
+:::: { .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif %} }
 {{- "\n\n" -}}
 {{- obj -}}
 {{- "\n\n::::\n" -}}
 
 name: onlyenv visibleenv
 {{- "\n" -}}
-:::: { .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif -%} }
+:::: { .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif %} }
 {{- "\n\n" -}}
 {{- obj -}}
 {{- "\n\n:::::\n" -}}

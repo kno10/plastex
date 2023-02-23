@@ -10,21 +10,18 @@ from plasTeX import TeXFragment, Element
 
 def _convert(v, u="%"):
     import re
-    if isinstance(v, Element):
-        if re.match(r"^(line|column|text)(width|height)$", v.nodeName): return "100"+u
-    if isinstance(v, TeXFragment):
-        m = re.match(r"^\s*(\d*\.?\d+|\d+\.?)?\s*\\(line|column|text)(width|height)\s*$", v.source)
-        if m and m.group(1): return "%d%s" % (float(m.group(1))*100, u)
-        if m: return "100"+u
-    return v
+    m = re.match(r"^\s*\{\s*(\d*\.?\d+|\d+\.?)?\s*\\(line|column|text)(width|height)\s*\}\s*$", v)
+    if m and m.group(1): return "%d%s" % (float(m.group(1))*100, u)
+    if m: return "100"+u
+    return None
 
 class TextBoxCommand(Command):
     def invoke(self, tex):
         res = Command.invoke(self, tex)
         height = self.attributes.get("height")
         width = self.attributes.get("width")
-        if height is not None: self.style['height'] = _convert(height, "vh")
-        if width is not None: self.style['width'] = _convert(width, "%")
+        if "height" in getattr(self, "argSources", {}): self.style['height'] = _convert(self.argSources.get('height'), "vh") or height
+        if "width" in getattr(self, "argSources", {}): self.style['width'] = _convert(self.argSources.get('width'), "%") or width
         return res
     class width(DimenCommand):
         value = DimenCommand.new(0)
@@ -76,8 +73,8 @@ class minipage(Environment):
         res = Environment.invoke(self, tex)
         height = self.attributes.get("height")
         width = self.attributes.get("width")
-        if height is not None: self.style['height'] = _convert(height, "vh")
-        if width is not None: self.style['width'] = _convert(width, "%")
+        if "height" in getattr(self, "argSources", {}): self.style['height'] = _convert(self.argSources.get('height'), "vh") or height
+        if "width" in getattr(self, "argSources", {}): self.style['width'] = _convert(self.argSources.get('width'), "%") or width
         return res
 
 class rule(Command):
