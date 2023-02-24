@@ -62,3 +62,6 @@ class verb(Command):
     def normalize(self, charsubs=None):
         """ Normalize, but don't allow character substitutions """
         return Command.normalize(self)
+
+class PlasTeXPassthrough(VerbatimEnvironment):
+    macroName = 'plastexpassthrough'
