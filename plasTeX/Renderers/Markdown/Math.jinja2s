@@ -1,13 +1,17 @@
 name: math
-{{ obj.mathjax_source | trim }}
+${{ obj.mathjax_source | trim }}$
 
 name: ensuremath
-\({{ obj.mathjax_source | trim }}\)
+${{ obj.mathjax_source | trim }}$
 
-name: displaymath equation* eqnarray eqnarray* align align* gather gather* flalign flalign* multline multline* alignat alignat* split
+name: displaymath
 comment: add id as anchor?
-{{ obj.mathjax_source | trim }}
+$${{ obj.mathjax_source | replace("\\end{"+obj.nodeName+"}\\begin{"+obj.nodeName+"}","\n") | trim }}$$
+
+name: equation* eqnarray eqnarray* align align* gather gather* flalign flalign* multline multline* alignat alignat* split
+comment: add id as anchor?
+{{ obj.mathjax_source | replace("\\end{"+obj.nodeName+"}\\begin{"+obj.nodeName+"}","\n") | trim }}
 
 name: equation
 comment: add id as anchor? - does this even work here as desired?
-\[{{ obj.mathjax_source }} \tag{{{ obj.ref }}}\]
+$${{ obj.mathjax_source }} \tag{{{ obj.ref }}}$$

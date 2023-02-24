@@ -39,7 +39,7 @@ class MathEnvironment(NoCharSubEnvironment):
 
     @property
     def mathjax_source(self):
-        return mathjax_lt_gt(self.source)
+        return mathjax_lt_gt(sourceChildren(self))
 
 class MathEnvironmentPre(MathEnvironment):
     """
@@ -55,7 +55,7 @@ class MathEnvironmentPre(MathEnvironment):
 
 def mathjax_lt_gt(s: str) -> str:
     """Help mathjax deal with < and >, see http://docs.mathjax.org/en/latest/input/tex/html.html?highlight=lt#html-special-characters."""
-    return s.replace('<', r'{\lt}').replace('>', r'{\gt}')
+    return s.replace('<', r'\lt{}').replace('>', r'\gt{}')
     #return s.replace('<', r'&lt;').replace('>', r'&gt;')
 
 class math(MathEnvironment):
@@ -64,13 +64,6 @@ class math(MathEnvironment):
         if self.hasChildNodes():
             return u'$%s$' % sourceChildren(self)
         return '$'
-
-    @property
-    def mathjax_source(self):
-        if self.hasChildNodes():
-            s = sourceChildren(self)
-            return r'\({}\)'.format(mathjax_lt_gt(s))
-        return ''
 
 class displaymath(MathEnvironment):
     blockType = True
@@ -134,9 +127,7 @@ class ensuremath(Command):
 
     @property
     def mathjax_source(self):
-        if self.hasChildNodes():
-            return mathjax_lt_gt(sourceChildren(self))
-        return ""
+        return mathjax_lt_gt(sourceChildren(self))
 
 class equation(MathEnvironment):
     blockType = True
