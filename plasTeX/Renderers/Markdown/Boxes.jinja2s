@@ -4,23 +4,36 @@ name: mbox makebox
 name: fbox framebox
 {{- "\n" -}}
 ::: { .fbox
-{%- set sole = obj.childNodes|first %}
-{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
-{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} width="{{ obj.width|string|float * 100 |round }}%"{% endif %}
-{{ obj }}
-:::{{ "\n" -}}
-
-name: parbox
-{{- "\n" -}}
-::: { .parbox
-{%- set sole = obj.childNodes|first %}
+{#- ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output #}
+{%- set chi = obj.childNodes %}
+{%- if chi[0]|string|trim == "" %}{%- set chi = chi[1:] %}{%- endif %}
+{%- if chi[-1]|string|trim == "" %}{%- set chi = chi[:-1] %}{%- endif %}
+{%- set sole = chi|first if chi|count == 1 %}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
 {%- if obj.width %} width="{{ obj.width|string|float * 100 |round }}%"{% endif %}
 {{- " }\n\n" -}}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
-{{- obj.childNodes[0] | trim("\n") }}
+{{- sole | trim("\n") }}
+{%- else %}
+{{ obj | trim("\n") }}
+{%- endif -%}
+:::{{ "\n" -}}
+
+name: parbox
+{{- "\n" -}}
+::: { .parbox
+{#- ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output #}
+{%- set chi = obj.childNodes %}
+{%- if chi[0]|string|trim == "" %}{%- set chi = chi[1:] %}{%- endif %}
+{%- if chi[-1]|string|trim == "" %}{%- set chi = chi[:-1] %}{%- endif %}
+{%- set sole = chi|first if chi|count == 1 %}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
+{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
+{%- if obj.width %} width="{{ obj.width|string|float * 100 |round }}%"{% endif %}
+{{- " }\n\n" -}}
+{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
+{{- sole | trim("\n") }}
 {%- else %}
 {{ obj | trim("\n") }}
 {%- endif -%}
@@ -29,13 +42,17 @@ name: parbox
 name: minipage
 {{- "\n" -}}
 ::: { .minipage
-{%- set sole = obj.childNodes|first %}
+{#- ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output #}
+{%- set chi = obj.childNodes %}
+{%- if chi[0]|string|trim == "" %}{%- set chi = chi[1:] %}{%- endif %}
+{%- if chi[-1]|string|trim == "" %}{%- set chi = chi[:-1] %}{%- endif %}
+{%- set sole = chi|first if chi|count == 1 %}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
 {%- if obj.width %} width="{{ obj.width|string|float * 100 |round }}%"{% endif %}
 {{- " }\n\n" -}}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
-{{- obj.childNodes[0] | trim("\n") }}
+{{- sole | trim("\n") }}
 {%- else %}
 {{ obj | trim("\n") }}
 {%- endif -%}
