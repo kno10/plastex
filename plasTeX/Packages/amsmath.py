@@ -137,3 +137,6 @@ class numberwithin(Command):
 
 class eqref(Command):
     args = 'label:idref'
+
+class refeq(Command):
+    args = 'label:idref'

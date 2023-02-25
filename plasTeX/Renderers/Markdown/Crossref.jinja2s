@@ -1,7 +1,7 @@
 name: ref
 {% if 'label' in obj.idref and obj.idref.label.ref %}<a href="{{obj.idref.label.url}}">{{obj.idref.label.ref}}</a>{% else %}??{% endif %}
 
-name: eqref
+name: eqref refeq
 {% if 'label' in obj.idref and obj.idref.label.ref %}<a href="{{obj.idref.label.url}}" class="eqref">{{obj.idref.label.ref}}</a>{% else %}??{% endif %}
 
 name: cref Cref
