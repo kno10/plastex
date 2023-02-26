@@ -314,10 +314,10 @@ class Macro(Element):
             return vars(tself)[localsname]
         except KeyError:
             pass
-        mro = list(tself.__mro__)
-        mro.reverse()
+        #mro = list(tself.__mro__)
+        #mro.reverse()
         loc = {}
-        for cls in mro:
+        for cls in tself.__mro__[::-1]:
             for value in list(vars(cls).values()):
                 if ismacro(value):
                     loc[macroName(value)] = value
@@ -442,7 +442,7 @@ class Macro(Element):
         s = '%s%s%s' % (escape, name, argSource)
 
         # If self.childNodes is not empty, print out the contents
-        if self.attributes and 'self' in list(self.attributes.keys()):
+        if self.attributes and 'self' in self.attributes:
             pass
         else:
             if self.hasChildNodes():
@@ -1130,7 +1130,7 @@ def expandDef(definition, params):
     return output
 
 class NewCommand(Macro):
-    """ Superclass for all \newcommand/\newenvironment type commands """
+    r""" Superclass for all \newcommand/\newenvironment type commands """
     nargs = 0
     opt = None
     definition = None
