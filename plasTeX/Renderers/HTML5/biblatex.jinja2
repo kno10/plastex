@@ -1,0 +1,16 @@
+name: printbibliography
+<dl class="bibliography">
+{% for item in obj.bibitems.values() %}
+  <dt><a name="{{ item.id }}">{{ item.bibitem["key"] }}</a></dt>
+  <dd>{{ item.authorstr }}<br>
+    <b>{{ item.title }}</b><br>
+    {{ item.bibitem["year"] }}</dd>
+{% endfor %}
+</dl>
+
+name: fullcite
+{% for item in obj.bibitems -%}
+{{ item.authorstr }}
+<b>{{ item.title }}</b><br/>
+{{ item.bibitem["year"] }}
+{% endfor -%}
