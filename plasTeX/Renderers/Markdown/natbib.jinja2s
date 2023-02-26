@@ -10,8 +10,3 @@ name: nocite defcitealias
 
 name: newblock
 {{ " " }}
-
-name: fullcite
-{% for item in obj.bibitems -%}
-{{ item.bibcite }}
-{% endfor -%}
