@@ -1,14 +1,20 @@
-name: includegraphics rotatebox scalebox reflectbox resizebox
-{% if obj.imageoverride.endswith('.svg') and obj.renderer.vectorImager.enabled %}
-{% set image = obj.vectorImage %}
-{% else %}
-{% set image = obj.image %}
-{% endif %}
-{% if obj.style and obj.style.inline %}
-<img src="{{ obj.imageoverride }}" alt="{{ obj.source }}" style="{{ obj.style.inline }}" />
-{% else %}
-<img src="{{ obj.imageoverride }}" alt="{{ obj.source }}" style="width: {{ image.width.px }}; height: {{ image.height.px }}" />
-{% endif %}
+name: rotatebox scalebox reflectbox resizebox
+![{{ obj.source }}]({{ obj.vectorImage }})
+
+name: includegraphics
+{%- if obj.imageoverride and (not obj.imagefilesize > 100000) and obj.renderer.vectorImager.enabled %}
+{%- if obj.imageoverride.endswith('.svg') or obj.imageoverride.endswith('.pdf') %}
+{%- set image = obj.vectorImage %}
+{%- endif %}
+{%- endif %}
+{%- if not image %}{% set image = obj.image %}{% endif %}
+<img src="{{ image }}" alt="{{ obj.source }}"
+{%- if obj.style and obj.style.inline -%}
+{{ " " }}style="{{ obj.style.inline }}"
+{%- elif image.width or image.height -%}
+{{ " " }}style="width: {{ image.width.px }}; height: {{ image.height.px }}"
+{%- endif -%}
+/>
 
 name: DeclareGraphicsExtensions graphicspath
 {# hide #}
