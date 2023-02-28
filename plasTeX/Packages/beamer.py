@@ -1,4 +1,4 @@
-from plasTeX import Command, Environment
+from plasTeX import Command, Environment, Node
 from plasTeX.Base import textbf, textit, textsl, textrm, textsf
 from plasTeX.Base import List, label, newcommand, newenvironment
 from plasTeX.Base import renewcommand, renewenvironment
@@ -25,6 +25,7 @@ def ProcessOptions(options, document):
 class frame(Command):
     args = '< overlay > self'
     subtitle = None
+    level = Node.OUTER_ENVIRONMENT_LEVEL
 
     def invoke(self, tex):
         # This macro can be an environment or a command each 
@@ -56,6 +57,8 @@ class frameenv(Environment):
     args = '< overlay > < defaultoverlay > [ options:dict ] { title } { subtitle }'
     subtitle = None
     forcePars = True
+    level = Node.OUTER_ENVIRONMENT_LEVEL
+    blockType = True
 
     def addToFrames(self):
         """ Add this frame to the frame collection """
