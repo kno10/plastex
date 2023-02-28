@@ -1,7 +1,7 @@
 name: printbibliography
 <dl class="bibliography">
 {% for item in obj.bibitems.values() %}
-<dt><a name="{{ item.id }}"><a name="{{ item.bibitem["key"] }}">{{ item.bibitem["labelalpha"] }}</a></dt>
+<dt><a name="{{ item.id }}" />{{ item.bibitem["labelalpha"] }}</a></dt>
 <dd>
 {%- if item.bibitem["author"] %}{{ item.authorstr }}.<br/>{% endif -%}
 {%- if item.bibitem["editor"] %}{{ item.editorstr }} (eds).<br/>{% endif -%}
