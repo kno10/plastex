@@ -7,6 +7,7 @@ TODO:
 - punctuation styles?
 - add compression for numeric (c.f., natbib)?
 - compressed display of same authors?
+- make maxnames configurable
 """
 
 import re, string
@@ -22,6 +23,10 @@ class bstyleoption(Text):
 
 def ProcessOptions(options, document):
     """ Process package options """
+    default_options = {
+                'maxcitenames': 3,
+                'maxbibnames': 999,
+            }
     options = options or dict()
     new_options = dict()
     punct = {'post': bstyleoption(', '),
@@ -31,14 +36,15 @@ def ProcessOptions(options, document):
              'style':bstyleoption('a'),
              'dates':bstyleoption(','),
              'years':bstyleoption(',')}
-    # TODO: support various options?
-    document.userdata['biblatex'] = {**options, **new_options, 'punctuation': punct}
+    # TODO: support various options!
+    document.userdata['biblatex'] = {**default_options, **options, **new_options, 'punctuation': punct}
 
-def _format_names(authors):
+def _format_names(authors, maxnames=999):
     if not authors:
-        return ["?"]
+        return None
     au = []
-    for i, a in enumerate(authors):
+    trunc = len(authors) if not maxnames or len(authors) <= maxnames else maxnames - 1
+    for i, a in enumerate(authors[:trunc]):
         if i > 0:
             au.append(", " if i < len(authors) - 1 else ", and ")
         g, f = a.get("given"), a.get("family")
@@ -50,6 +56,8 @@ def _format_names(authors):
             au.extend((g, " ", f))
         else:
             au.append(f)
+    if trunc < len(authors):
+        au.append("et al.") # TODO: use parsed "et al.{}" in case we output to tex?
     return au if au else ["?"]
 
 class biblatexitem(Base.Command):
@@ -58,11 +66,11 @@ class biblatexitem(Base.Command):
 
     @property
     def authorstr(self):
-        return "".join(_format_names(self.bibitem.get("author")))
+        return "".join(_format_names(self.bibitem.get("author"), self.ownerDocument.userdata['biblatex'].get("maxbibnames")))
 
     @property
     def editorstr(self):
-        return "".join(_format_names(self.bibitem.get("editor")))
+        return "".join(_format_names(self.bibitem.get("editor"), self.ownerDocument.userdata['biblatex'].get("maxbibnames")))
 
     @property
     def title(self):
@@ -77,6 +85,8 @@ class biblatexsty(Base.Command):
 
 class printbibliography(Base.bibliography):
     args = '[ options:dict ]'
+    level = Base.Node.ENVIRONMENT_LEVEL
+    blockType = True
 
     class setcounter(Base.Command):
         # Added so that setcounters in the aux file don't mess counters up
@@ -99,9 +109,13 @@ class printbibliography(Base.bibliography):
 
 class refsection(Base.Environment):
     args = 'sect:int'
+    level = Base.Node.OUTER_ENVIRONMENT_LEVEL
+    blockType = True
 
     class datalist(Base.Environment):
         args = '[ type:str ] name:str'  
+        level = Base.Node.OUTER_ENVIRONMENT_LEVEL
+        blockType = True
 
         class endentry(Base.Command):
             def invoke(self, tex):
@@ -116,6 +130,7 @@ class refsection(Base.Environment):
                 #for k,v in curbib.bibitem.items(): print(k, v.textContent if hasattr(v, "textContent") else str(v))
                 self.ownerDocument.userdata.setPath('bibliography/bibcites', bibcites)
                 self.ownerDocument.userdata.setPath('bibliography/curbib', None)
+                self.ownerDocument.userdata.setPath('bibliography/curverb', None)
                 return [end]
 
     class entry(Base.Command):
@@ -126,6 +141,7 @@ class refsection(Base.Environment):
 
         def invoke(self, tex):
             super().invoke(tex)
+            self.id = self.attributes["key"]
             #self.ownerDocument.context.push(self) # to find "biblatexitem"
             curbib = self # self.ownerDocument.createElement('biblatexitem')
             self.ownerDocument.userdata.setPath('bibliography/curbib', curbib)
@@ -134,11 +150,11 @@ class refsection(Base.Environment):
 
         @property
         def authorstr(self):
-            return "".join(_format_names(self.bibitem.get("author")))
+            return "".join(_format_names(self.bibitem.get("author"), self.ownerDocument.userdata['biblatex'].get("maxbibnames")))
 
         @property
         def editorstr(self):
-            return "".join(_format_names(self.bibitem.get("editor")))
+            return "".join(_format_names(self.bibitem.get("editor"), self.ownerDocument.userdata['biblatex'].get("maxbibnames")))
 
         @property
         def title(self):
@@ -280,6 +296,15 @@ class refsection(Base.Environment):
                 self.attributes["value"] = tex.normalize(output)
                 self.argSources = { "value": source }
                 self.argSource = source
+            # verb appear to always come in pairs, usually \verb{key}\verb content\endverb
+            # FIXME: is this guaranteed?
+            curverb = self.ownerDocument.userdata.getPath('bibliography/curverb')
+            if curverb:
+                curbib = self.ownerDocument.userdata.getPath('bibliography/curbib')
+                curbib.bibitem[curverb] = self.attributes["value"]
+                self.ownerDocument.userdata.setPath('bibliography/curverb', None)
+            else:
+                self.ownerDocument.userdata.setPath('bibliography/curverb', self.attributes["value"])
             self.ownerDocument.context.pop(self)
 
         def Xdigest(self, tokens):
@@ -332,6 +357,10 @@ class BiblatexCite(Base.cite):
     @property
     def punctuation(self):
         return self.ownerDocument.userdata['biblatex']['punctuation']
+
+    @property
+    def bibopt(self):
+        return self.ownerDocument.userdata['biblatex']
 
     @property
     def bibitems(self):
@@ -407,13 +436,15 @@ class BiblatexCite(Base.cite):
 
     def capitalize(self, item):
         """ Capitalize the first text node """
+        if isinstance(item, str): return item.capitalize()
+        if isinstance(item, list): return [self.capitalize(x) for x in item]
         item = item.cloneNode(True)
         textnodes = [x for x in item.allChildNodes
                        if x.nodeType == self.TEXT_NODE]
         if not textnodes:
             return item
         node = textnodes.pop(0)
-        node.parentNode.replaceChild(node.cloneNode(True).capitalize() ,node)
+        node.parentNode.replaceChild(node.cloneNode(True).capitalize(), node)
         return item
 
     def numcitation(self):
@@ -439,14 +470,14 @@ class parencite(BiblatexCite):
         if self.isNumeric():
             return self.numcitation()
 
-        res = [self.punctuation['open'] + self.prenote]
+        res = [self.punctuation['open'], self.prenote]
         for i, item in enumerate(self.bibitems):
             if i > 0:
                 res.append(self.punctuation['sep']+' ')
-            res.extend(_format_names(item.bibitem.get("author")))
+            res.extend(_format_names(item.bibitem.get("author", self.bibopt.get("maxcitenames"))))
             res.append(self.punctuation['sep'])
             res.append(str(item.bibitem.get("year", "?")))
-        res.append(self.postnote + self.punctuation['close'])
+        res.extend([self.postnote, self.punctuation['close']])
         return res
 
 class citep(parencite):
@@ -463,7 +494,7 @@ class textcite(BiblatexCite):
         for i, item in enumerate(bibitems):
             if i > 0:
                 res.append(self.separator+' ')
-            res.extend(self.capitalize(_format_names(item.bibitem.get("author"))))
+            res.extend(self.capitalize(_format_names(item.bibitem.get("author"), self.bibopt.get("maxcitenames"))))
             res.append(' ')
             res.append(self.punctuation['open'])
             # Prenote
@@ -500,7 +531,7 @@ class citeauthor(BiblatexCite):
         for i, item in enumerate(bibitems):
             if i > 0:
                 res.append(self.separator+' ')
-            res.extend(self.capitalize(_format_names(item.bibitem.get("author"))))
+            res.extend(self.capitalize(_format_names(item.bibitem.get("author"), self.bibopt.get("maxcitenames"))))
         res.append(self.postnote)
         return res
 
@@ -508,9 +539,19 @@ class citeauthor(BiblatexCite):
         """ Numeric style citations, always with brackets """
         return [self.punctuation['open']] + super().numcitation() + [self.punctuation['close']]
 
-class cite(citep):
-    """Default to parens - make configurable?"""
-    pass
+class cite(BiblatexCite):
+    """Symbolic cite, make configurable?"""
+    def citation(self, full=False, capitalize=False):
+        bibitems = self.bibitems
+        res = self.ownerDocument.createDocumentFragment()
+        for i, item in enumerate(bibitems):
+            if i > 0:
+                res.append(self.separator+' ')
+            node = self.ownerDocument.createElement('bgroup')
+            node.append(item.bibitem.get("labelalpha", "?")) # TODO: was: item.bibcite
+            node.idref['bibitem'] = item
+            res.append(node)
+        return res
 
 class fullcite(textcite):
     """Fixme, should be full bibitem"""
