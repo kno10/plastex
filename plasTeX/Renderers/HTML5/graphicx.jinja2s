@@ -12,7 +12,7 @@ name: includegraphics
 {%- if obj.style and obj.style.inline -%}
 {{ " " }}style="{{ obj.style.inline }}"
 {%- elif image.width or image.height -%}
-{{ " " }}style="width: {{ image.width.px }}; height: {{ image.height.px }}"
+{{ " " }}style="width: {{ image.width.px }}px; height: {{ image.height.px }}px"
 {%- endif -%}
 />
 

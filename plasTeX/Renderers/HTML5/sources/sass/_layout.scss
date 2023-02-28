@@ -39,17 +39,18 @@ div.content {
 /* Columns */
 div.columns {
   display: flex;
-  min-width: 100%;
+  flex-flow: row;
+  width: 100%;
 }
 
 /* Alignment */
 div.centered {
   display: flex;
-	flex-wrap: wrap;
-	align-items: center;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-around;
-	min-width: 100%;
-	margin: 0 auto;
+  min-width: 100%;
+  margin: 0 auto;
 }
 
 div.flushleft, div.raggedright {

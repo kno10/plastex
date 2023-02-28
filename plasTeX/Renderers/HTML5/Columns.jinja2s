@@ -1,9 +1,9 @@
 name: columns
-<div class="columns">
+<div class="columns" {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% else %}{%- if obj.attributes.totalwidth %} style="width: {{ obj.attributes.totalwidth|string|float * 100 |round }}%"{% endif %}{% endif %}>
 {{ obj }}
 </div>
 
 name: column columnenv
-<div class="col">
+<div class="col" {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% else %}{%- if obj.attributes.width %} style="width: {{ obj.attributes.width|string|float * 100 |round }}%"{% endif %}{% endif %}>
 {{ obj }}
 </div>

@@ -1,5 +1,7 @@
 name: tikzpicture tikz
+{%- if obj.renderer.vectorImager.enabled %}
 ![]({{ obj.vectorImage }})
+{%- endif %}
 ```tex
 {{ obj.source }}
 ```{{ "\n" }}

@@ -1,4 +1,19 @@
 name: tabbing
-```tex
-{{ obj.source }}
-```
+<table class="tabbing">
+<tr><td>
+{#- FIXME: support \kill etc. #}
+{%- for child in obj %}
+{%- if child.__class__.__name__.endswith("TabStop") %}
+</td><td>
+{%- elif child.__class__.__name__.endswith("EndRow") %}
+</td></tr>
+<tr><td>
+{%- elif child.__class__.__name__.endswith("kill") %}
+</td></tr><!-- killed row -->
+<tr style="border-top:solid red 2px"><td>
+{%- else %}
+{{ child }}
+{%- endif %}
+{%- endfor %}
+</td></tr>
+</table>

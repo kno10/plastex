@@ -10,12 +10,12 @@ name: printbibliography
 {%- if item.bibitem["booktitle"] %}{% if sep %}<br/>{% endif %}In: <i>{{ item.bibitem["booktitle"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["journaltitle"] %}{% if sep %}<br/>{% endif %}In: <i>{{ item.bibitem["journaltitle"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["series"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["series"] }}</i>{% set sep=True %}{% endif -%}
+{%- if item.bibitem["volume"] %}{% if sep %} {% endif %}{{ item.bibitem["volume"] }}{%- if item.bibitem["issue"] %}({{ item.bibitem["issue"] }}){% endif -%}{% set sep=True %}{% endif -%}
 {%- if item.bibitem["publisher"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["publisher"] | join(", ") }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["school"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["school"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["institution"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["institution"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["howpublished"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["howpublished"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["isbn"] %}{% if sep %}, {% endif %}{{ item.bibitem["isbn"] }}{% set sep=True %}{% endif -%}
-{%- if item.bibitem["volume"] %} {{ item.bibitem["volume"] }}{%- if item.bibitem["issue"] %}({{ item.bibitem["issue"] }}){% endif -%}{% set sep=True %}{% endif -%}
 {%- if item.bibitem["pages"] %}{% if sep %}, {% endif %}{{ item.bibitem["pages"] }}{% set sep=True %}{% endif -%}
 {%- if item.bibitem["year"] %}{% if sep %}, {% endif %}{{ item.bibitem["year"] }}{% set sep=True %}{% endif -%}
 {%- if item.bibitem["type"] %}{% if sep %}, {% endif %}{{ item.bibitem["type"] }}{% set sep=True %}{% endif -%}
@@ -34,12 +34,12 @@ name: fullcite
 {%- if item.bibitem["booktitle"] %}{% if sep %}<br/>{% endif %}In: <i>{{ item.bibitem["booktitle"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["journaltitle"] %}{% if sep %}<br/>{% endif %}In: <i>{{ item.bibitem["journaltitle"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["series"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["series"] }}</i>{% set sep=True %}{% endif -%}
+{%- if item.bibitem["volume"] %}{% if sep %} {% endif %}{{ item.bibitem["volume"] }}{%- if item.bibitem["issue"] %}({{ item.bibitem["issue"] }}){% endif -%}{% set sep=True %}{% endif -%}
 {%- if item.bibitem["publisher"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["publisher"] | join(", ") }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["school"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["school"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["institution"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["institution"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["howpublished"] %}{% if sep %}, {% endif %}<i>{{ item.bibitem["howpublished"] }}</i>{% set sep=True %}{% endif -%}
 {%- if item.bibitem["isbn"] %}{% if sep %}, {% endif %}{{ item.bibitem["isbn"] }}{% set sep=True %}{% endif -%}
-{%- if item.bibitem["volume"] %} {{ item.bibitem["volume"] }}{%- if item.bibitem["issue"] %}({{ item.bibitem["issue"] }}){% endif -%}{% set sep=True %}{% endif -%}
 {%- if item.bibitem["pages"] %}{% if sep %}, {% endif %}{{ item.bibitem["pages"] }}{% set sep=True %}{% endif -%}
 {%- if item.bibitem["year"] %}{% if sep %}, {% endif %}{{ item.bibitem["year"] }}{% set sep=True %}{% endif -%}
 {%- if item.bibitem["type"] %}{% if sep %}, {% endif %}{{ item.bibitem["type"] }}{% set sep=True %}{% endif -%}

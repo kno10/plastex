@@ -1,10 +1,19 @@
 name: tabbing
-<div class="tabbing">
-{% if obj.renderer.vectorImager.enabled %}
-<object type="image/svg+xml" data="{{ obj.vectorImage.url }}" style="width: {{ obj.vectorImage.width.em }}; height: {{ obj.vectorImage.height.em }};">
-{% endif %}
-<img src="{{ obj.image.url }}" alt="{{ obj.source }}" style="width: {{ obj.image.width.px }}; height: {{obj.image.height.px }}" class="tabbing gen" />
-{% if obj.renderer.vectorImager.enabled %}
-</object>
-{% endif %}
-</div>
+<table class="tabbing">
+<tr><td>
+{#- FIXME: support \kill etc. #}
+{%- for child in obj %}
+{%- if child.__class__.__name__.endswith("TabStop") %}
+</td><td>
+{%- elif child.__class__.__name__.endswith("EndRow") %}
+</td></tr>
+<tr><td>
+{%- elif child.__class__.__name__.endswith("kill") %}
+</td></tr><!-- killed row -->
+<tr style="border-top:solid red 2px"><td>
+{%- else %}
+{{ child }}
+{%- endif %}
+{%- endfor %}
+</td></tr>
+</table>

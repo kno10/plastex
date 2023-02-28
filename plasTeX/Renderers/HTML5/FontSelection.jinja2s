@@ -49,6 +49,8 @@ name: tt
 name: sc
 <i class="sc">{{ obj }}</i>
 
+name: sout
+<span class="strike">{{ obj }}</span>
 
 name: tiny
 <small class="tiny">{{ obj }}</small>

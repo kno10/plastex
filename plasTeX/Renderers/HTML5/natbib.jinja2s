@@ -1,4 +1,4 @@
-name: cite citet citep citealt citealp citeauthor citeyear citeyearpar \
+name: Xcite citet citep citealt citealp citeauthor citeyear citeyearpar \
       Cite Citet Citep Citealt Citealp Citeauthor citefullauthor citetalias \
       citepalias
 type: xml

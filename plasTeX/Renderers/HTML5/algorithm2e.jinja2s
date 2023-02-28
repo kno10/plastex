@@ -1,4 +1,5 @@
-<div class="tikzpicture" id="{{ obj.id }}">
+name: algorithm
+<div class="algorithm" id="{{ obj.id }}">
   {%- if obj.renderer.vectorImager.enabled %}
     <img src="{{ obj.vectorImage.url }}" alt="{{ obj.source|e }}" />
   {%- else %}
