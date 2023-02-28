@@ -1,13 +1,12 @@
 name: frame frameenv
-{% if obj.title -%}
-{{ "##" }} {{ obj.title }}
-{% endif -%}
-{% if obj.subtitle -%}
-{{ "###" }} {{ obj.subtitle }}
-{% endif -%}
-
-{{ obj }}
----
+{%- if obj.title %}
+{{- "\n#" }} {{ obj.title }}
+{%- endif %}
+{%- if obj.subtitle %}
+{{- "\n##" }} {{ obj.subtitle }}
+{%- endif -%}
+{{- "\n\n" }}
+{{- obj }}
 
 name: frametitle framesubtitle
 {#- inserted via frame -#}

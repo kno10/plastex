@@ -1,5 +1,6 @@
 name: default default-layout document-layout document
-{% if title -%}
+---
+{% if obj.title -%}
 {{ "title:" }} {{ obj.title }}
 {% endif -%}
 {% if obj.links -%}
@@ -18,8 +19,9 @@ name: default default-layout document-layout document
 {{ obj }}
 
 {%- if obj.footnotes %}
-{%- macro render(x) %}{{ x }}{% endmacro -%}
-{% for footnote in obj.footnotes -%}
-[^{{ footnote.id}}]: {{ render(footnote) | indent(2, False, True) }}
-{% endfor -%}
-{% endif -%}
+::: footer
+{%- for footnote in obj.footnotes %}
+[^{{ footnote.id}}]: {{ footnote | string | indent(2, False, True) }}
+{%- endfor %}
+:::
+{% endif %}
