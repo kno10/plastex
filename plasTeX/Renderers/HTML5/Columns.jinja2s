@@ -4,6 +4,6 @@ name: columns
 </div>
 
 name: column columnenv
-<div class="col" {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% else %}{%- if obj.attributes.width %} style="width: {{ obj.attributes.width|string|float * 100 |round }}%"{% endif %}{% endif %}>
+<div class="col" {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% else %}{%- if obj.attributes.width %} style="width: {{ obj.attributes.width.inch|float / 0.065 }}%"{% endif %}{% endif %}>
 {{ obj }}
 </div>

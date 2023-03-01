@@ -6,7 +6,11 @@ name: ensuremath
 
 name: displaymath equation* eqnarray eqnarray* align align* gather gather* flalign flalign* multline multline* alignat alignat* split
 <div class="displaymath" id="{{ obj.id }}">
+{%- if obj.mathjax_source.startswith("\\begin{"+obj.nodeName) %}
+{{ obj.mathjax_source | replace("\\end{"+obj.nodeName+"}\\begin{"+obj.nodeName+"}","\n") }}
+{%- else %}
 \[ {{ obj.mathjax_source | replace("\\end{"+obj.nodeName+"}\\begin{"+obj.nodeName+"}","\n") }} \]
+{%- endif %}
 </div>
 
 name: equation

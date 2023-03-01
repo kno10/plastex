@@ -4,10 +4,11 @@ Implement the tikz package using the imager
 from plasTeX import VerbatimEnvironment, Command, Environment
 
 class tikzpicture(VerbatimEnvironment):
+    #causes parsing problems when there are no options? #args = "[ options:dict ]"
     pass
 
 class tikz(Command):
-    args = "[ options:str ] self"
+    args = "[ options:dict ] self"
     pass
 
 class usetikzlibrary(Command):

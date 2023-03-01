@@ -27,4 +27,4 @@ name: cite
 ]]{.cite}
 
 name: bibliographyref
-[{{ obj.idref.bibitem.bibcite }}]({{obj.idref.bibitem.url}})
+[{{ obj }}]({{obj.idref.bibitem.url}})

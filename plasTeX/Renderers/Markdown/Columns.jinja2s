@@ -17,7 +17,9 @@ name: column columnenv
 {%- set sole = chi|first if chi|count == 1 %}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.attributes.width %} width="{{ obj.attributes.width|string|float * 100 |round }}%"{% endif %}
+{#- 15.38 = 100/width in inch #}
+{%- if obj.attributes.width.inch %} width="{{ obj.attributes.width.inch|float * 15.38 |round }}%"
+{%- elif obj.attributes.width %} width="{{ obj.attributes.width|float * 100 |round }}%"{% endif %}
 {{- " }\n\n" -}}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
 {{- sole | trim("\n") }}

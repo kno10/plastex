@@ -97,7 +97,7 @@ class pause(Command):
     args = '[ number:int ]'
 
 class onslide(Command):
-    args = '*+ < overlay > { self }'
+    args = '*+ < overlay >'
 
 class only(Command):
     args = '< overlay > self < overlay2 >'
@@ -306,7 +306,7 @@ class columns(Environment):
     args = '< overlay > [ options:dict ]'
 
 class column(Command):
-    args = '< overlay > [ placement ] width'
+    args = '< overlay > [ placement ] width:dimen'
     def invoke(self, tex):
         # This macro can be an environment or a command each 
         # with different arguments.

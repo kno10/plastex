@@ -30,8 +30,8 @@ def ProcessOptions(options, document):
     options = options or dict()
     new_options = dict()
     punct = {'post': bstyleoption(', '),
-             'open': bstyleoption('('),
-             'close':bstyleoption(')'),
+             'open': bstyleoption('['),
+             'close':bstyleoption(']'),
              'sep':  bstyleoption(';'),
              'style':bstyleoption('a'),
              'dates':bstyleoption(','),
@@ -428,10 +428,7 @@ class BiblatexCite(Base.cite):
         """ Return cite value based on current style """
         b = self.ownerDocument.createElement('bibliographyref')
         b.idref['bibitem'] = item
-        if self.isNumeric():
-            b.append(item.bibcite)
-        else:
-            b.append(str(item.bibitem.get("year", "?")))
+        b.append(item.bibitem.get("labelalpha", "?")) # TODO: was: item.bibcite or year
         return b
 
     def capitalize(self, item):
@@ -547,10 +544,7 @@ class cite(BiblatexCite):
         for i, item in enumerate(bibitems):
             if i > 0:
                 res.append(self.separator+' ')
-            node = self.ownerDocument.createElement('bgroup')
-            node.append(item.bibitem.get("labelalpha", "?")) # TODO: was: item.bibcite
-            node.idref['bibitem'] = item
-            res.append(node)
+            res.append(self.citeValue(item))
         return res
 
 class fullcite(textcite):

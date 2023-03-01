@@ -26,4 +26,4 @@ name: cite
 ]</span>
 
 name: bibliographyref
-<a href="{{ obj.idref.bibitem.url }}">{{ obj.idref.bibitem.bibcite }}</a>
+<a href="{{ obj.idref.bibitem.url }}">{{ obj }}</a>
