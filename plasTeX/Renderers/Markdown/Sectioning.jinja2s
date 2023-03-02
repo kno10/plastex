@@ -24,7 +24,7 @@ name: part chapter section
 {{ obj }}
 
 
-name: subsection 
+name: subsection
 ## {{ obj.title }} {% if obj.id %}{{ '{#' }}{{ obj.id }}}{% endif %}
 {{ obj }}
 

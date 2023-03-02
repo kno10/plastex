@@ -3,10 +3,9 @@ name: egroup
 name: bgroup
 {{ obj }}
 
-name: tableofcontents input @vobeyspaces @noligs def protect let \
+name: input @vobeyspaces @noligs def protect let \
       newcommand hfill hline openout renewcommand write hspace appendix \
       global noindent include markboth setcounter refstepcounter \
       parindent indent setlength settowidth addtolength \
       nopagebreak newwrite newcounter typeout sloppypar hfil thispagestyle vfill \
       phantom hphantom vphantom
-
