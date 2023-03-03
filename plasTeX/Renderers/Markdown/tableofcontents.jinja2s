@@ -1,0 +1,11 @@
+name: tableofcontents
+{%- set doc = obj.ownerDocument.getElementsByTagName('document')[0] %}
+{%- set toc = doc.tableofcontents %}
+::: toc{{ "\n" }}
+{%- for section in toc recursive %}
+- [{{ section.tocEntry }}]({{ section.url }}){{ "\n" -}}
+{%- if section.tableofcontents %}
+{{- loop(section.tableofcontents) | indent(2, True) }}
+{%- endif %}
+{%- endfor %}
+:::{{ "\n" }}

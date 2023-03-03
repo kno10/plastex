@@ -1,4 +1,11 @@
 name: enquote foreignquote
+{#- TODO: does not interact with openautoquote/closeautoquote yet #}
 {%- macro level(p) -%}{{- (level(p.parentNode)|int if p.parentNode else 0) + (1 if p.nodeName == "enquote" else 0) -}}{%- endmacro -%}
-{%- if level(obj)|int % 2 == 1 -%}“{{ obj }}”{%- else -%}‘{{ obj }}’{%- endif -%}
+{%- if level(obj)|int % 2 == 1 -%}“{{- obj -}}”{%- else -%}‘{{- obj -}}’{%- endif -%}
+
+name: openautoquote
+{{ "“" -}}{# not well supported yet #}
+
+name: closeautoquote
+{{- "”" }}{# not well supported yet #}
 

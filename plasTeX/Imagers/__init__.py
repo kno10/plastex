@@ -888,9 +888,7 @@ width 2pt\hskip2pt}}{}
             elif oldext == ".pdf" and newext == ".svg" and os.path.getsize(name) < 500000: # TODO: make limit configurable?
                 import subprocess
                 cmd = ['pdf2svg', name, path]
-                if "page" in node.attributes: cmd.append(node.attributes["page"])
-                if "page" in node.attributes:
-                    log.warning("file {} parameters {} -> {}".format(name, node.attributes or None, cmd))
+                if "page" in node.attributes: cmd.append(node.attributes["page"]) # untested. select page in pdf
                 subprocess.run(cmd, check=True)
                 scale = self.get_scale(node.nodeName)
                 if scale != 1:

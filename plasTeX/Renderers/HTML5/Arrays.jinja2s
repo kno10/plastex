@@ -1,25 +1,29 @@
 name: tabular array tabular* tabularx
-<table class="tabular">
-{% for row in obj %}
-  <tr>
-  {% for cell in row %}
-  {% if cell.isHeader %}
-    <th style="{{ cell.style.inline }}" 
-        rowspan="{{ cell.attributes.rowspan }}"
-        colspan="{{ cell.attributes.colspan}}">
-      {{ cell }}
-    </th>
-  {% else %}
-    <td  style="{{ cell.style.inline }}" 
-        rowspan="{{ cell.attributes.rowspan }}"
-        colspan="{{ cell.attributes.colspan }}">
-      {{ cell }}
-    </td>
-  {% endif %}
-  {% endfor %}
-  </tr>
-{% endfor %}
-</table>
+{{- "\n" }}<table class="tabular">
+{%- for row in obj %}
+{{- "\n<tr>" }}
+{%- for cell in row %}
+{%- if cell.isHeader %}
+{{- "\n  <th" }}
+{%- if cell.style and cell.style.inline %} style="{{ cell.style.inline }}"{% endif -%}
+{%- if cell.attributes.rowspan %} rowspan="{{ cell.attributes.rowspan }}"{% endif -%}
+{%- if cell.attributes.colspan %} colspan="{{ cell.attributes.colspan }}"{% endif -%}
+{{- ">\n" -}}
+  {{ cell }}
+{{- "\n  </th>" }}
+{%- else %}
+{{- "\n  <td" }}
+{%- if cell.style and cell.style.inline %} style="{{ cell.style.inline }}"{% endif -%}
+{%- if cell.attributes.rowspan %} rowspan="{{ cell.attributes.rowspan }}"{% endif -%}
+{%- if cell.attributes.colspan %} colspan="{{ cell.attributes.colspan }}"{% endif -%}
+{{- ">\n" -}}
+  {{ cell }}
+{{- "\n  </td>" }}
+{%- endif %}
+{%- endfor %}
+{{- "\n" }}</tr>
+{%- endfor %}
+</table>{{ "\n" -}}
 
 name: multicolumn
 {{ obj }}
