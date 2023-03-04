@@ -1,9 +1,11 @@
 """
 Centernot command, supported by mathjax extension
-
-MathJax also has centerOver, but that does not seem to be in LaTeX?
 """
 from plasTeX import Command
 
 class centernot(Command):
-    args = "self"
+    args = "symv"
+
+class centerOver(Command):
+    """Currently only in MathJax! Copy and modify the centernot.sty if you use this."""
+    args = "symb1 symb2"
