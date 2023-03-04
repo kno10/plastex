@@ -12,12 +12,20 @@ name: frametitle framesubtitle
 {#- inserted via frame -#}
 
 name: note
-::: notes
-{{ obj }}
-:::
+::: notes{{ "\n" -}}
+{{- obj -}}
+{{- "\n:::\n" -}}
 
 name: only visible
+{% if "\n" in (obj|string|trim("\n")) %}
+{{- "\n" -}}
+:::: { .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif %} }
+{{- "\n\n" -}}
+{{- obj -}}
+{{- "\n\n:::::\n" -}}
+{% else %}
 [{{ obj }}]{ .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif %} }
+{% endif %}
 
 name: onlyenv visibleenv
 {{- "\n" -}}

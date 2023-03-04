@@ -15,15 +15,14 @@ name: bibliography
 {{- "\n:::\n\n" -}}
 
 name: cite
-[[
-{%- for item in obj.citation() -%}
-{%- if item.idref and item.idref.bibitem.url -%}
-[{{ item | replace("$^{+}$","^+^") }}]({{item.idref.bibitem.url}})
-{%- else -%}
-{{ item }}
-{%- endif -%}
-{%- if not loop.last %}{{ " " }}{% endif -%}
-{%- endfor -%}
+[[{# -#}
+{% for item in obj.citation() %}
+{% if item.idref and item.idref.bibitem.url %}
+[{{ item | replace("$^{+}$","^+^") }}]({{item.idref.bibitem.url}}){# -#}
+{% else %}
+{{ item }}{# -#}
+{% endif %}
+{% endfor %}
 ]]{.cite}
 
 name: bibliographyref
