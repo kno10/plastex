@@ -15,6 +15,12 @@ class vspace(Command):
 class phantom(Command):
     args = 'text:str'
 
+class hphantom(Command):
+    args = 'text:str'
+
+class vphantom(Command):
+    args = 'text:str'
+
 class bigskip(Command):
     pass
 
