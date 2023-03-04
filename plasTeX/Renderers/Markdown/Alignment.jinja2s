@@ -1,27 +1,27 @@
 name: center centering centerline
 {{- "\n" -}}
 ::: { .centered }
-{{- "\n\n" -}}
+{{- "\n" -}}
 {{- obj |trim("\n") }}
 :::{{ "\n" -}}
 
 name: flushleft raggedright leftline
 {{- "\n" -}}
 ::: { .flushleft }
-{{- "\n\n" -}}
+{{- "\n" -}}
 {{- obj |trim("\n") }}
 :::{{ "\n" -}}
 
 name: raggedleft flushright llap
 {{- "\n" -}}
 ::: { .flushright }
-{{- "\n\n" -}}
+{{- "\n" -}}
 {{- obj |trim("\n") }}
 :::{{ "\n" -}}
 
 name: raggedbottom
 {{- "\n" -}}
 ::: { .raggedbottom }
-{{- "\n\n" -}}
+{{- "\n" -}}
 {{- obj |trim("\n") }}
 :::{{ "\n" -}}
