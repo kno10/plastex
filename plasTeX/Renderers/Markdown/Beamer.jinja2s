@@ -17,11 +17,7 @@ name: note
 :::
 
 name: only visible
-{{- "\n" -}}
-:::: { .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif %} }
-{{- "\n\n" -}}
-{{- obj -}}
-{{- "\n\n::::\n" -}}
+[{{ obj }}]{ .fragment {%- if obj.attributes.overlay != "+" %} .fragment-{{ obj.attributes.overlay | replace("|","-") }}{% endif %} }
 
 name: onlyenv visibleenv
 {{- "\n" -}}
