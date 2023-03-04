@@ -13,15 +13,13 @@ name: default default-layout document-layout document
 {% if obj.links.up.url -%}
 {{ "up:" }} {{ obj.links.up.url }}
 {% endif -%}
-{%- endif -%}
-{#- also use obj.links.*.title.textContent? -#}
+{% endif -%}
+{# also use obj.links.*.title.textContent? -#}
 ---
 {{ obj }}
 
-{%- if obj.footnotes %}
-::: footer
-{%- for footnote in obj.footnotes %}
-[^{{ footnote.id}}]: {{ footnote | string | indent(2, False, True) }}
-{%- endfor %}
-:::
-{% endif %}
+{% if obj.footnotes -%}
+{% for footnote in obj.footnotes -%}
+{{ "\n\n" }}[^{{ footnote.id}}]: {{ footnote | string | indent(2, False, True) }}
+{% endfor -%}
+{% endif -%}
