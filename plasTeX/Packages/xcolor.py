@@ -1830,7 +1830,7 @@ class ColorCommand(Command, ColorCommandClass):
         self.parser:ColorParser = ColorParser(
                 u.getPath('packages/xcolor/colors'),
                 u.getPath('packages/xcolor/target_model'))
-    
+
 class color(ColorEnvironment):
     r"""The \color command (c.f. pg 22, xcolor v2.12, 2016/05/11)"""
     args = '< overlay > [ model:str ] color:str'
@@ -1846,12 +1846,13 @@ class color(ColorEnvironment):
         """Rewrite the source tex to apply the final mixed color directly.
 
         This ensures colors mixed by xcolor can be displayed when the source
-        tex is used in output that doesn't support xcolor, e.g. with mathjax
+        tex is used in output that doesn't support xcolor, e.g., with mathjax
         and the HTML5 renderer.
         """
         rgb = self.color.as_model(self.parser.target).as_rgb
-        return r'\require{{color}}{{\color[rgb]{{{r:.15f},{g:.15f},{b:.15f}}}{children}}}'.format(
-                r = rgb.r, g = rgb.g, b= rgb.b, children = sourceChildren(self))
+        return r'{{\color[RGB]{{{r:d},{g:d},{b:d}}}{children}}}'.format(
+                r = int(rgb.r * 255), g = int(rgb.g * 255), b = int(rgb.b * 255),
+                children = sourceChildren(self))
 
 class textcolor(ColorCommand):
     r"""The \textcolor command (c.f. pg 22, xcolor v2.12, 2016/05/11)"""
@@ -1862,6 +1863,19 @@ class textcolor(ColorCommand):
         self.parser.current_color = self.current_color
         self.color:Color = self.parser.parseColor(self.attributes['color'], self.attributes['model'])
         self.style['color'] = self.color.html
+
+    @property
+    def source(self) -> str:
+        """Rewrite the source tex to apply the final mixed color directly.
+
+        This ensures colors mixed by xcolor can be displayed when the source
+        tex is used in output that doesn't support xcolor, e.g., with mathjax
+        and the HTML5 renderer.
+        """
+        rgb = self.color.as_model(self.parser.target).as_rgb
+        return r'\textcolor[RGB]{{{r:d},{g:d},{b:d}}}{{{children}}}'.format(
+                r = int(rgb.r * 255), g = int(rgb.g * 255), b = int(rgb.b * 255),
+                children = sourceChildren(self))
 
 class colorbox(ColorCommand):
     r"""The \colorbox command (c.f. pg 22, xcolor v2.12, 2016/05/11)"""
