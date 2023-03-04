@@ -6,3 +6,6 @@ name: algorithm
     <img src="{{ obj.image.url }}" alt="{{ obj.source|e }}" />
   {%- endif %}
 </div>
+
+name: IncMargin DecMargin
+
