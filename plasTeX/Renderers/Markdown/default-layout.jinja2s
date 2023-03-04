@@ -1,7 +1,7 @@
 name: default default-layout document-layout document
 ---
 {% if obj.title -%}
-{{ "title:" }} {{ obj.title }}
+{{ "title:" }} {{ obj.title|string|tojson }}
 {% endif -%}
 {% if obj.links -%}
 {% if obj.links.next.url -%}
