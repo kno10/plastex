@@ -676,6 +676,9 @@ class mathtt(Command):
 class mathcal(Command):
     args = 'self'
 
+class mathup(Command):
+    args = 'self'
+
 class boldmath(Command):
     pass
 
