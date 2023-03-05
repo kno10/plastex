@@ -20,6 +20,6 @@ name: default default-layout document-layout document
 
 {% if obj.footnotes -%}
 {% for footnote in obj.footnotes -%}
-{{ "\n\n" }}[^{{ footnote.id}}]: {{ footnote | string | indent(2, False, True) }}
+{{ "\n" }}[^{{ footnote.mark.attributes["num"] }}]: {{ footnote | string | trim("\n") | indent(2, False, True) | trim("\n") -}}
 {% endfor -%}
 {% endif -%}
