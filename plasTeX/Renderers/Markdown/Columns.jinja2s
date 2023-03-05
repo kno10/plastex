@@ -2,7 +2,7 @@ name: columns
 {{- "\n" -}}
 :::: { .columns
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.attributes.totalwidth %} width="{{ obj.attributes.totalwidth|string|float * 100 |round }}%"{% endif %}
+{%- if obj.attributes.totalwidth %} style="width:{{ (obj.attributes.totalwidth|string|float*100)|round(2) }}%"{% endif %}
 {{- " }\n" -}}
 {{ obj | trim("\n") }}
 {{- "\n::::\n" -}}
@@ -18,8 +18,8 @@ name: column columnenv
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
 {#- 15.38 = 100/width in inch #}
-{%- if obj.attributes.width and obj.attributes.width.inch %} width="{{ obj.attributes.width.inch|float * 15.38 |round }}%"
-{%- elif obj.attributes.width %} width="{{ obj.attributes.width|float * 100 |round }}%"{% endif %}
+{%- if obj.attributes.width and obj.attributes.width.inch %} style="width:{{ (obj.attributes.width.inch|float*15.38)|round(2) }}%"
+{%- elif obj.attributes.width %} style="width:{{ (obj.attributes.width|float*100)|round(2) }}%"{% endif %}
 {{- " }\n" -}}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
 {{- sole | trim("\n") }}
