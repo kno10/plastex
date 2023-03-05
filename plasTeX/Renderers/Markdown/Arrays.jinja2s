@@ -9,7 +9,7 @@ name: tabular array tabular* tabularx
 {%- if cell.attributes.rowspan %} rowspan="{{ cell.attributes.rowspan }}"{% endif -%}
 {%- if cell.attributes.colspan %} colspan="{{ cell.attributes.colspan }}"{% endif -%}
 {{- ">\n" -}}
-{{ cell | string | trim("\n") | indent(2, True) }}
+{{ cell | string | trim("\n") | replace("\n\n\n\n","\n\n") | replace("\n\n\n", "\n\n") | indent(2, True) }}
 {{- "\n  </th>" }}
 {%- else %}
 {{- "\n  <td" }}
@@ -17,7 +17,7 @@ name: tabular array tabular* tabularx
 {%- if cell.attributes.rowspan %} rowspan="{{ cell.attributes.rowspan }}"{% endif -%}
 {%- if cell.attributes.colspan %} colspan="{{ cell.attributes.colspan }}"{% endif -%}
 {{- ">\n" -}}
-{{ cell | string | trim("\n") | indent(2, True) }}
+{{ cell | string | trim("\n") | replace("\n\n\n\n","\n\n") | replace("\n\n\n", "\n\n") | indent(2, True) }}
 {{- "\n  </td>" }}
 {%- endif %}
 {%- endfor %}

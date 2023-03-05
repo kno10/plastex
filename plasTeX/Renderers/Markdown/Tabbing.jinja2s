@@ -31,7 +31,7 @@ name: tabbing
 </td></tr><!-- killed row -->
 <tr style="border-top:solid red 2px"><td>
 {%   else %}
-{{ child | string | trim("\n") | indent(2, True) }}
+{{ child | string | trim("\n") | replace("\n\n\n\n","\n\n") | replace("\n\n\n", "\n\n") | indent(2, True) }}
 {%   endif %}
 {% else %}
 {% endif %}

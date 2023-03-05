@@ -11,7 +11,7 @@ name: fbox framebox
 {%- set sole = chi|first if chi|count == 1 %}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} style="width:{{ (obj.width|string|float*100)|round(2) }}%"{% endif %}
+{%- if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}
 {{- " }\n\n" -}}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
 {{- sole | trim("\n") }}
@@ -30,7 +30,7 @@ name: parbox
 {%- set sole = chi|first if chi|count == 1 %}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} style="width:{{ (obj.width|string|float*100)|round(2) }}%"{% endif %}
+{%- if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}
 {{- " }\n\n" -}}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
 {{- sole | trim("\n") }}
@@ -49,7 +49,7 @@ name: minipage
 {%- set sole = chi|first if chi|count == 1 %}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
 {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} style="width:{{ (obj.width|string|float*100)|round(2) }}%"{% endif %}
+{%- if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}
 {{- " }\n\n" -}}
 {%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
 {{- sole | trim("\n") }}
