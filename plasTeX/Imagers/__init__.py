@@ -14,6 +14,7 @@ log = getLogger()
 depthlog = getLogger('render.images.depth')
 status = getLogger('status')
 imagelog = getLogger('imager')
+length_re = re.compile('([0-9\\.]*)(.*)')
 
 try:
     from PIL import Image as PILImage
@@ -893,7 +894,7 @@ width 2pt\hskip2pt}}{}
                 scale = self.get_scale(node.nodeName)
                 if scale != 1:
                     import xml.etree.ElementTree as ET
-                    tree = ET.parse(filename)
+                    tree = ET.parse(path)
                     root = tree.getroot()
                     for attrib in ["width", "height"]:
                         m = length_re.match(root.attrib[attrib])
@@ -901,7 +902,7 @@ width 2pt\hskip2pt}}{}
                             raise ValueError
                         root.attrib[attrib] = "{:.2f}{}".format(float(m.group(1)) * scale, m.group(2))
 
-                    tree.write(filename)
+                    tree.write(path)
                 width = height = None
             # If PIL is available, convert the image to the appropriate type
             else:
@@ -920,7 +921,7 @@ width 2pt\hskip2pt}}{}
 
         # If anything fails, just let the imager handle it...
         except Exception as msg:
-            log.warning('%s in image "%s".  Reverting to LaTeX to generate the image.' % (msg, name))
+            log.warning('%s in image "%s".  Reverting to LaTeX to generate the image.' % (msg, name)) #, exc_info=True)
             pass
         return self.newImage(node)
 
