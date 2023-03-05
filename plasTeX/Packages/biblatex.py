@@ -371,6 +371,7 @@ class BiblatexCite(Base.cite):
                 items.append(b[key])
             else:
                 log.warning("Unresolved bib key: {}".format(key))
+                items.append(key)
         return items
 
     @property
@@ -427,8 +428,11 @@ class BiblatexCite(Base.cite):
     def citeValue(self, item):
         """ Return cite value based on current style """
         b = self.ownerDocument.createElement('bibliographyref')
-        b.idref['bibitem'] = item
-        b.append(item.bibitem.get("labelalpha", "?")) # TODO: was: item.bibcite or year
+        if hasattr(item, "bibitem"):
+            b.idref['bibitem'] = item
+            b.append(item.bibitem.get("labelalpha", "?")) # TODO: was: item.bibcite or year
+        else:
+            b.append(item) # key
         return b
 
     def capitalize(self, item):
@@ -471,6 +475,9 @@ class parencite(BiblatexCite):
         for i, item in enumerate(self.bibitems):
             if i > 0:
                 res.append(self.punctuation['sep']+' ')
+            if not hasattr(item, "bibitem"):
+                res.append(item)
+                continue
             res.extend(_format_names(item.bibitem.get("author", self.bibopt.get("maxcitenames"))))
             res.append(self.punctuation['sep'])
             res.append(str(item.bibitem.get("year", "?")))
@@ -491,6 +498,9 @@ class textcite(BiblatexCite):
         for i, item in enumerate(bibitems):
             if i > 0:
                 res.append(self.separator+' ')
+            if not hasattr(item, "bibitem"):
+                res.append(item)
+                continue
             res.extend(self.capitalize(_format_names(item.bibitem.get("author"), self.bibopt.get("maxcitenames"))))
             res.append(' ')
             res.append(self.punctuation['open'])
@@ -528,7 +538,10 @@ class citeauthor(BiblatexCite):
         for i, item in enumerate(bibitems):
             if i > 0:
                 res.append(self.separator+' ')
-            res.extend(self.capitalize(_format_names(item.bibitem.get("author"), self.bibopt.get("maxcitenames"))))
+            if hasattr(item, "bibitem"):
+                res.extend(self.capitalize(_format_names(item.bibitem.get("author"), self.bibopt.get("maxcitenames"))))
+            else:
+                res.append(item)
         res.append(self.postnote)
         return res
 
