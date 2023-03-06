@@ -1,7 +1,8 @@
 name: tikzpicture tikz
-{%- if obj.renderer.vectorImager.enabled %}
-![]({{ obj.vectorImage }})
-{%- endif %}
+{% if obj.renderer.vectorImager.enabled %}
+![]({{ obj.vectorImage }}){{ "" -}}
+{% if obj.attributes.overlay %}{{ "{" }} .fragment data-fragment-index="{{ obj.attributes.overlay }}"{{ "}" }}{% endif -%}
+{% endif -%}
 {{- "\n" }}```tex
 {{ obj.source }}
 ```{{ "\n" }}

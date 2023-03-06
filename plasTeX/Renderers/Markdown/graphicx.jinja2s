@@ -2,18 +2,24 @@ name: rotatebox scalebox reflectbox resizebox
 ![{{ obj.source }}]({{ obj.vectorImage }})
 
 name: includegraphics
-{%- if obj.imageoverride and (not obj.imagefilesize > 100000) and obj.renderer.vectorImager.enabled %}
-{%- if obj.imageoverride.endswith('.svg') or obj.imageoverride.endswith('.pdf') %}
-{%- set image = obj.vectorImage %}
-{%- endif %}
-{%- endif %}
-{%- if not image %}{% set image = obj.image %}{% endif %}
-![{{ obj.source }}]({{ image }})
-{%- if obj.style and obj.style.inline -%}
-{ style="{{ obj.style.inline }}" }
-{%- elif image.width or image.height -%}
-{{ "{" }}{% if image.width %} width={{ image.width.px }}{% endif %}{% if image.height %} height={{ image.height.px }}{% endif %}{{ " }\n" }}
-{%- endif -%}
+{% if obj.imageoverride and (not obj.imagefilesize > 100000) and obj.renderer.vectorImager.enabled %}
+{% if obj.imageoverride.endswith('.svg') or obj.imageoverride.endswith('.pdf') %}
+{% set image = obj.vectorImage %}
+{% endif %}
+{% endif %}
+{% if not image %}{% set image = obj.image %}{% endif -%}
+![{{ obj.source }}]({{ image }}){{ "" -}}
+{% if obj.attributes.overlay or (obj.style and obj.style.inline) or image.width or image.height -%}
+{{- "{" -}}
+{% if obj.attributes.overlay %} .fragment data-fragment-index="{{ obj.attributes.overlay }}"{% endif -%}
+{% if obj.style and obj.style.inline -%}
+{{ " " }}style="{{ obj.style.inline }}"{{ "" -}}
+{% elif image.width or image.height -%}
+{% if image.width %} width={{ image.width.px }}{% endif -%}
+{% if image.height %} height={{ image.height.px }}{% endif -%}
+{% endif -%}
+{{- " }\n" -}}
+{% endif -%}
 
 name: DeclareGraphicsExtensions graphicspath
 {# hide #}

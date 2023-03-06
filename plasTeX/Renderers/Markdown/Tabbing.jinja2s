@@ -1,40 +1,40 @@
 name: tabbing
 <table class="tabbing">
 <tr><td>
-{% set ns = namespace(good=0, skip=0) %}
-{% for child in obj %}
-{% set cur = loop.index %}
-{% if cur > ns.good %}
-{# SKIP until a following \kill, unless an EndRow is inbetween #}
-{% for other in obj %}
-{%   if loop.index > cur %}
-{%     if other.__class__.__name__.endswith("EndRow") %}
-{%       set ns.good = loop.index %}
-{%       break %}
-{%     elif other.__class__.__name__.endswith("kill") %}
-{%       set ns.skip = loop.index + 1 %}
-{%       break %}
-{%     endif %}
-{%   endif %}
-{%   if loop.last %}
-{%     set ns.good = loop.index %}
-{%   endif %}
-{% endfor %}
-{% endif %}
-{% if cur >= ns.skip %}
-{%   if child.__class__.__name__.endswith("TabStop") %}
+{% set ns = namespace(good=0, skip=0) -%}
+{% for child in obj -%}
+{% set cur = loop.index -%}
+{% if cur > ns.good -%}
+{# SKIP until a following \kill, unless an EndRow is inbetween -#}
+{% for other in obj -%}
+{%   if loop.index > cur -%}
+{%     if other.__class__.__name__.endswith("EndRow") -%}
+{%       set ns.good = loop.index -%}
+{%       break -%}
+{%     elif other.__class__.__name__.endswith("kill") -%}
+{%       set ns.skip = loop.index + 1 -%}
+{%       break -%}
+{%     endif -%}
+{%   endif -%}
+{%   if loop.last -%}
+{%     set ns.good = loop.index -%}
+{%   endif -%}
+{% endfor -%}
+{% endif -%}
+{% if cur >= ns.skip -%}
+{%   if child.__class__.__name__.endswith("TabStop") -%}
 </td><td>
-{%   elif child.__class__.__name__.endswith("EndRow") %}
+{%   elif child.__class__.__name__.endswith("EndRow") -%}
 </td></tr>
 <tr><td>
-{%   elif child.__class__.__name__.endswith("kill") %}
+{%   elif child.__class__.__name__.endswith("kill") -%}
 </td></tr><!-- killed row -->
 <tr style="border-top:solid red 2px"><td>
-{%   else %}
+{%   else -%}
 {{ child | string | trim("\n") | replace("\n\n\n\n","\n\n") | replace("\n\n\n", "\n\n") | indent(2, True) }}
-{%   endif %}
-{% else %}
-{% endif %}
-{% endfor %}
+{%   endif -%}
+{% else -%}
+{% endif -%}
+{% endfor -%}
 </td></tr>
 </table>

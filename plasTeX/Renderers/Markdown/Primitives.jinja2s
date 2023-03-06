@@ -1,10 +1,12 @@
 name: par
+{% if obj|string|trim -%}
 {% set chi = obj.childNodes -%}
 {% if chi|count >= 1 -%}
 {% if sole and sole.nodeName|trim("*") in ["includegraphics", "tikzpicture", "center", "tabbing", "tabular", "itemize", "enumerate", "displaymath", "align", "alignat", "flalign"] -%}
-{{ obj |string |trim("\n") }}{{ "\n" -}}
+{{ sole |string |trim("\n") }}{{ "\n" -}}
 {% else -%}
 {{ obj |string |trim("\n") }}{% if obj.blockType %}{{ "\n\n\n" }}{% else %}{{ "\n\n" }}{% endif -%}
+{% endif -%}
 {% endif -%}
 {% endif -%}
 
