@@ -82,7 +82,6 @@ class Renderable(object):
     def __str__(self):
         """
         Invoke the rendering process on all of the child nodes.
-
         """
         r = Node.renderer
 
@@ -93,12 +92,7 @@ class Renderable(object):
 
         # If we don't have childNodes, then we're done
         if not self.hasChildNodes():
-#           if self.filename:
-#               status.info(' [ %s ] ', self.filename)
             return ''
-
-#       if self.filename:
-#           status.info(' [ %s ', self.filename)
 
         # At the very top level, only render the DOCUMENT_LEVEL node
         if self.nodeType == Node.DOCUMENT_NODE:
@@ -110,119 +104,126 @@ class Renderable(object):
         # Render all child nodes
         s = []
         for child in childNodes:
-
-            # Short circuit text nodes
-            if child.nodeType == Node.TEXT_NODE:
-                s.append(r.textDefault(child))
-                continue
-
-            # Short circuit macros that have unicode equivalents
-            uni = child.str
-            if uni is not None:
-                s.append(r.textDefault(uni))
-                continue
-
-            layouts, names = [], []
-            nodeName = child.nodeName
-            modifier = None
-
-            # Does the macro specify an alternative templateName
-            templateName = getattr(child, 'templateName', None)
-            # Does the macro have a modifier (i.e. '*')
-            if child.attributes:
-                modifier = child.attributes.get('*modifier*')
-
-            if child.filename:
-                # Force footnotes to be cached
-                if hasattr(child, 'footnotes'):
-                    _ = child.footnotes
-
-                status.info(' [ %s ', child.filename)
-
-                # Filename and templateName
-                if templateName:
-                    layouts.append('%s-layout' % (templateName))
-                    if modifier:
-                        layouts.append('%s-layout%s' % (templateName, modifier))
-
-                # Filename and modifier
-                if modifier:
-                    layouts.append('%s-layout%s' % (nodeName, modifier))
-
-                # Add nodeName to list
-                layouts.append('%s-layout' % nodeName)
-
-                # For naming of images:
-                if hasattr(child, 'id') and getattr(child, '@hasgenid', None) is None:
-                    if Node.renderer.imager: Node.renderer.imager.update_variables({'id': child.id})
-                    if Node.renderer.vectorImager: Node.renderer.vectorImager.update_variables({'id': child.id})
-
-
-            # templateName
-            if templateName:
-                names.append(templateName)
-                if modifier:
-                    names.append('%s%s' % (templateName, modifier))
-            # Modifier
-            if modifier:
-                names.append('%s%s' % (nodeName, modifier))
-
-            names.append(nodeName)
-            layouts.append('default-layout')
-
-            # Locate the rendering callable, and call it with the
-            # current object (i.e. `child`) as its argument.
-            func = r.find(names, r.default)
-            val = func(child)
-
-            # If a plain string is returned, we have no idea what
-            # the encoding is, but we'll make a guess.
-            if type(val) is not str:
-                log.warning('The renderer for %s returned a non-unicode string.  Using the default input encoding.' % type(child).__name__)
-                val = str(val)
-
-            # If the content should go to a file, write it and go
-            # to the next child.
-            if child.filename:
-                filename = child.filename
-
-                # Create any directories as needed
-                directory = os.path.dirname(filename)
-                if directory and not os.path.isdir(directory):
-                    os.makedirs(directory)
-
-                # Add the layout wrapper if there is one
-                func = r.find(layouts)
-                if func is not None:
-                    val = func(StaticNode(child, val))
-
-                    # If a plain string is returned, we have no idea what
-                    # the encoding is, but we'll make a guess.
-                    if type(val) is not str:
-                        log.warning('The renderer for %s returned a non-unicode string.  Using the default input encoding.' % type(child).__name__)
-                        val = str(val)
-
-                # Write the file content
-
-                enc = child.config['files']['output-encoding']
-                with open(filename, 'w', encoding=enc) as f:
-                    f.write(val)
-
-                status.info(' ] ')
-
-                continue
-
-            # Append the resultant object to the output
-            s.append(val)
-
-#       if self.filename:
-#           status.info(' ] ')
+            if child is not None:
+                val = self.renderChild(child)
+                # Append the resultant object to the output
+                if val is not None: s.append(val)
 
         return r.outputType(''.join(s))
 
-    # def __str__(self):
-    #     return ''
+    def renderChild(self, child):
+        """
+        Invoke the rendering process on a single child node
+        """
+        if child is None:
+            log.warning("Template error, render(None)", exc_info=1)
+            return
+        if isinstance(child, str):
+            return child
+        if not isinstance(child, Node):
+            log.warning("Template error, render must get a node as first argument", exc_info=1)
+            return
+        r = Node.renderer
+        # Short circuit text nodes
+        if child.nodeType == Node.TEXT_NODE:
+            return r.textDefault(child)
 
+        # Short circuit macros that have unicode equivalents
+        uni = child.str
+        if uni is not None:
+            return r.textDefault(uni)
+
+        if child is self:
+            log.warning("Template error, do not recursively call render() on self!", exc_info=1)
+            return self.__str__()
+
+        layouts, names = [], []
+        nodeName = child.nodeName
+        modifier = None
+
+        # Does the macro specify an alternative templateName
+        templateName = getattr(child, 'templateName', None)
+        # Does the macro have a modifier (i.e. '*')
+        if child.attributes:
+            modifier = child.attributes.get('*modifier*')
+
+        if child.filename:
+            # Force footnotes to be cached
+            if hasattr(child, 'footnotes'):
+                _ = child.footnotes
+
+            status.info(' [ %s ', child.filename)
+
+            # Filename and templateName
+            if templateName:
+                layouts.append('%s-layout' % (templateName))
+                if modifier:
+                    layouts.append('%s-layout%s' % (templateName, modifier))
+
+            # Filename and modifier
+            if modifier:
+                layouts.append('%s-layout%s' % (nodeName, modifier))
+
+            # Add nodeName to list
+            layouts.append('%s-layout' % nodeName)
+
+            # For naming of images:
+            if hasattr(child, 'id') and getattr(child, '@hasgenid', None) is None:
+                if Node.renderer.imager: Node.renderer.imager.update_variables({'id': child.id})
+                if Node.renderer.vectorImager: Node.renderer.vectorImager.update_variables({'id': child.id})
+
+        # templateName
+        if templateName:
+            names.append(templateName)
+            if modifier:
+                names.append('%s%s' % (templateName, modifier))
+        # Modifier
+        if modifier:
+            names.append('%s%s' % (nodeName, modifier))
+
+        names.append(nodeName)
+        layouts.append('default-layout')
+
+        # Locate the rendering callable, and call it with the
+        # current object (i.e. `child`) as its argument.
+        func = r.find(names, r.default)
+        val = func(child)
+
+        # If a plain string is returned, we have no idea what
+        # the encoding is, but we'll make a guess.
+        if type(val) is not str:
+            log.warning('The renderer for %s returned a non-unicode string.  Using the default input encoding.' % type(child).__name__)
+            val = str(val)
+
+        # If the content should go to a file, write it and go
+        # to the next child.
+        if child.filename:
+            filename = child.filename
+
+            # Create any directories as needed
+            directory = os.path.dirname(filename)
+            if directory and not os.path.isdir(directory):
+                os.makedirs(directory)
+
+            # Add the layout wrapper if there is one
+            func = r.find(layouts)
+            if func is not None:
+                val = func(StaticNode(child, val))
+
+                # If a plain string is returned, we have no idea what
+                # the encoding is, but we'll make a guess.
+                if type(val) is not str:
+                    log.warning('The renderer for %s returned a non-unicode string.  Using the default input encoding.' % type(child).__name__)
+                    val = str(val)
+
+            # Write the file content
+            enc = child.config['files']['output-encoding']
+            with open(filename, 'w', encoding=enc) as f:
+                f.write(val)
+
+            status.info(' ] ')
+            return # return to parent document
+        return val
 
     @property
     def image(self):

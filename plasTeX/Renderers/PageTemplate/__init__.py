@@ -45,11 +45,19 @@ else:
         log.warning(str(t)) # TODO: use a template logger? show a trace?
         return ""
 
+    @pass_context
+    def _jinja2_render(context, c):
+        if isinstance(c, list):
+            return "".join(context["obj"].renderChild(x) for x in c)
+        return context["obj"].renderChild(c)
+
     def jinja2template(s, encoding='utf8'):
         env = Environment(trim_blocks=True, lstrip_blocks=True, extensions=['jinja2.ext.loopcontrols'])
         env.globals['debug'] = debug
         env.filters['debug'] = _jinja2_log
         env.filters['log'] = _jinja2_log
+        env.globals['render'] = _jinja2_render
+        env.filters['render'] = _jinja2_render
 
         def renderjinja2(obj, s=s):
             tvars = {'here':obj,
@@ -59,12 +67,12 @@ else:
                      'config':obj.ownerDocument.config,
                      'context':obj.ownerDocument.context,
                      'templates':obj.renderer,
-                     'tpl_src': s}
+                     'tpl_src':s}
             try:
                 tpl = env.template_class.from_code(env, env.compile(s, filename=obj.nodeName), env.make_globals(None), None)
             except jinja2.exceptions.TemplateError as e:
                 log.exception('Jinja2 template error: {} while rendering node {}'
-                            ' using template  source\n {}\n'.format(
+                            ' using template source\n {}\n'.format(
                             e, obj.nodeName, s))
                 return ''
             try:
