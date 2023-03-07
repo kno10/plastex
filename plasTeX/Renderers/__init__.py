@@ -497,6 +497,8 @@ class Renderer(dict):
                 break
             elif name == 'dvisvgm':
                 from plasTeX.Imagers.dvisvgm import Imager as VectorImager
+            elif name == 'pdftocairo':
+                from plasTeX.Imagers.pdftocairo import Imager as VectorImager
             elif name == 'pdf2svg':
                 from plasTeX.Imagers.pdf2svg import Imager as VectorImager
             else:

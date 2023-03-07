@@ -888,22 +888,30 @@ width 2pt\hskip2pt}}{}
 
             elif oldext == ".pdf" and newext == ".svg" and os.path.getsize(name) < 500000: # TODO: make limit configurable?
                 import subprocess
-                cmd = ['pdf2svg', name, path]
-                if "page" in node.attributes: cmd.append(node.attributes["page"]) # untested. select page in pdf
+                # FIXME: use pdf2svg if pdftocairo is not available?
+                cmd = ['pdftocairo', '-svg', '-nocrop', name, path]
+                if "page" in node.attributes: cmd.extend(['-f', node.attributes["page"], '-l', node.attributes["page"]]) # untested. select page in pdf
                 subprocess.run(cmd, check=True)
-                scale = self.get_scale(node.nodeName)
-                if scale != 1:
-                    import xml.etree.ElementTree as ET
-                    tree = ET.parse(path)
-                    root = tree.getroot()
-                    for attrib in ["width", "height"]:
-                        m = length_re.match(root.attrib[attrib])
-                        if m is None:
-                            raise ValueError
-                        root.attrib[attrib] = "{:.2f}{}".format(float(m.group(1)) * scale, m.group(2))
-
-                    tree.write(path)
                 width = height = None
+                import xml.etree.ElementTree as ET
+                ET.register_namespace('', "http://www.w3.org/2000/svg")
+                ET.register_namespace('l', "http://www.w3.org/1999/xlink")
+                ET.register_namespace('h', "http://www.w3.org/1999/xhtml")
+                tree = ET.parse(path)
+                root = tree.getroot()
+                scale = self.get_scale(node.nodeName)
+                for attrib in ["width", "height"]:
+                    m = length_re.match(root.attrib[attrib])
+                    if m is None: raise ValueError # SVG has changed
+                    if attrib == "width": width = float(m.group(1)) * scale
+                    if attrib == "height": height = float(m.group(1)) * scale
+                    if scale != 1:
+                        root.attrib[attrib] = "{:.2f}{}".format(float(m.group(1)) * scale, m.group(2))
+                if scale != 1:
+                    tree.write(path)
+                # TODO: check if scour is availble, it is not strictly required.
+                cmd = ['scour', '-q', '--indent=none', '-o', path]
+                subprocess.run(cmd, input=open(path,"rb").read(), check=True)
             # If PIL is available, convert the image to the appropriate type
             else:
                 img = PILImage.open(name)

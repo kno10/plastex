@@ -28,6 +28,9 @@ class PDFSVG(VectorImager):
                 subprocess.run(['pdf2svg', self.tmpFile.with_suffix('.cropped.pdf').name, filename, str(page)], stdout=subprocess.DEVNULL, check=True)
 
                 if scale != 1:
+                    ET.register_namespace('', "http://www.w3.org/2000/svg")
+                    ET.register_namespace('l', "http://www.w3.org/1999/xlink")
+                    ET.register_namespace('h', "http://www.w3.org/1999/xhtml")
                     tree = ET.parse(filename)
                     root = tree.getroot()
 
