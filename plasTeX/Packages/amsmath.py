@@ -94,9 +94,6 @@ class bmatrix(Array):
 class Bmatrix(Array):
     pass
 
-class smallmatrix(Array):
-    pass
-
 class dddot(math):
     pass
 
