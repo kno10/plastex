@@ -1,5 +1,7 @@
 from plasTeX.Logging import getLogger
-from plasTeX.Packages.amsmath import _AMSEquation, _AMSEquationStar
+from plasTeX.Packages.amsmath import eqnarray, EqnarrayStar
+from plasTeX.Base.LaTeX.Math import EqnarrayStar, eqnarray
+from plasTeX.Base.LaTeX.Arrays import Array
 
 getLogger().warning('Package mathtools is not well supported by plasTeX or mathjax - please contribute.')
 
@@ -29,66 +31,66 @@ class shortintertext(Command):
         if node: return u"\\end{{{0}}}\n{1}\n\\begin{{{0}}}{2}".format(node.tagName, str(self), sourceArguments(node))
         return Command.source(self) # fallback
 
-class casesStar(_AMSEquationStar):
+class casesStar(EqnarrayStar):
     macroName = "cases*"
 
-class rcases(_AMSEquation):
+class rcases(eqnarray):
     pass
 
-class rcasesStar(_AMSEquationStar):
+class RCasesStar(EqnarrayStar):
     macroName = "rcases*"
 
-class dcases(_AMSEquation):
+class dcases(eqnarray):
     pass
 
-class dcasesStar(_AMSEquationStar):
+class DCasesStar(EqnarrayStar):
     macroName = "dcases*"
 
-class drcases(_AMSEquation):
+class drcases(eqnarray):
     pass
 
-class drcasesStar(_AMSEquationStar):
+class DRCasesStar(EqnarrayStar):
     macroName = "drcases*"
 
 class smallmatrix(Array):
     pass
 
-class smallmatrixStar(Array):
+class SmallMatrixStar(Array):
     macroName = "smallmatrix*"
 
 class bsmallmatrix(Array):
     pass
 
-class bsmallmatrixStar(Array):
+class bSmallMatrixStar(Array):
     macroName = "bsmallmatrix*"
 
 class Bsmallmatrix(Array):
     pass
 
-class BsmallmatrixStar(Array):
+class BSmallMatrixStar(Array):
     macroName = "Bsmallmatrix*"
 
 class vsmallmatrix(Array):
     pass
 
-class vsmallmatrixStar(Array):
+class vSmallMatrixStar(Array):
     macroName = "vsmallmatrix*"
 
 class Vsmallmatrix(Array):
     pass
 
-class VsmallmatrixStar(Array):
+class VSmallMatrixStar(Array):
     macroName = "Vsmallmatrix*"
 
-class bmatrixStar(Array):
+class bMatrixStar(Array):
     macroName = "bmatrix*"
 
-class BmatrixStar(Array):
+class BMatrixStar(Array):
     macroName = "Bmatrix*"
 
-class vmatrixStar(Array):
+class vMatrixStar(Array):
     macroName = "vmatrix*"
 
-class VmatrixStar(Array):
+class VMatrixStar(Array):
     macroName = "Vmatrix*"
 
