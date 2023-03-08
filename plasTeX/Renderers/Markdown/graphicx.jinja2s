@@ -2,6 +2,16 @@ name: rotatebox scalebox reflectbox resizebox
 ![{{ obj.source }}]({{ obj.vectorImage }})
 
 name: includegraphics
+{% macro overlay(oo) -%}{% if oo -%}
+{# First non-"handout" statement -#}
+{% set tmp = namespace(o=oo) -%}{% for x in (oo|string).split("|") %}{% if not "handout" in x %}{% set tmp.o=x %}{% break %}{% endif %}{% endfor %}{% set o = tmp.o -%}
+{% if o|trim == "1" %}.fragment .fade-out data-fragment-index="2" {{ "" -}}
+{% elif o|trim == "+-" %}.fragment {{ "" -}}
+{% elif o|trim == "+" %}.fragment .current-visible {{ "" -}}
+{% elif o|string|int|string == o|string %}.fragment .current-visible data-fragment-index="{{ o }}" {{ "" -}}
+{% elif o|trim("-")|int|string~"-" == o %}.fragment data-fragment-index="{{ o|trim("-") }}" {{ "" -}}
+{% else %}.fragment .current-visible data-fragment-index="{{ oo }}" {{ "" -}}
+{% endif %}{% endif %}{% endmacro -%}
 {% if obj.imageoverride and (not obj.imagefilesize > 100000) and obj.renderer.vectorImager.enabled %}
 {% if obj.imageoverride.endswith('.svg') or obj.imageoverride.endswith('.pdf') %}
 {% set image = obj.vectorImage %}
@@ -10,15 +20,14 @@ name: includegraphics
 {% if not image %}{% set image = obj.image %}{% endif -%}
 ![{{ obj.source }}]({{ image }}){{ "" -}}
 {% if obj.attributes.overlay or (obj.style and obj.style.inline) or image.width or image.height -%}
-{{- "{" -}}
-{% if obj.attributes.overlay %} .fragment data-fragment-index="{{ obj.attributes.overlay }}"{% endif -%}
+{{ "{ " }}{% if obj.attributes.overlay %}{{ overlay(obj.attributes.overlay) }}{% endif -%}
 {% if obj.style and obj.style.inline -%}
-{{ " " }}style="{{ obj.style.inline }}"{{ "" -}}
-{% elif image.width or image.height -%}
-{% if image.width %} width={{ image.width.px }}{% endif -%}
-{% if image.height %} height={{ image.height.px }}{% endif -%}
+style="{{ obj.style.inline }}"{{ " " -}}
+{#% elif image.width or image.height -%#}
+{#% if image.width %}width={{ image.width.px }} {% endif -%#}
+{#% if image.height %}height={{ image.height.px }} {% endif -%#}
 {% endif -%}
-{{- " }\n" -}}
+{{- "}\n" -}}
 {% endif -%}
 
 name: DeclareGraphicsExtensions graphicspath

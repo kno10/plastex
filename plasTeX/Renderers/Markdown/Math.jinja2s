@@ -6,11 +6,11 @@ ${{ obj.mathjax_source | trim }}$
 
 name: displaymath
 comment: add id as anchor?
-{%- if obj.mathjax_source.startswith("\\begin{"+obj.nodeName) %}
+{%- if obj.mathjax_source.startswith("\\begin{"+obj.nodeName) -%}
 {{ obj.mathjax_source | replace("\\end{"+obj.nodeName+"}\\begin{"+obj.nodeName+"}","\n") | trim }}
-{%- else %}
+{% else -%}
 $${{ obj.mathjax_source | replace("\\end{"+obj.nodeName+"}\\begin{"+obj.nodeName+"}","\n") | trim }}$$
-{%- endif %}
+{% endif -%}
 
 name: equation* eqnarray eqnarray* align align* gather gather* flalign flalign* multline multline* alignat alignat* split
 comment: add id as anchor?

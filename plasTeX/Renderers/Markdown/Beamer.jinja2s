@@ -1,38 +1,56 @@
 name: frame frameenv
-{%- if obj.title %}
-{{- "\n#" }} {{ obj.title }}
-{%- endif %}
-{%- if obj.subtitle %}
-{{- "\n##" }} {{ obj.subtitle }}
-{%- endif -%}
-{{- "\n\n" }}
-{{- obj }}
+{% if obj.title %}
+{{ "\n#" }} {{ obj.title }}
+{% endif %}
+{% if obj.subtitle %}
+{{ "\n##" }} {{ obj.subtitle }}
+{% endif -%}
+{{ "\n\n" }}
+{{ obj }}
 
 name: frametitle framesubtitle
 {#- inserted via frame -#}
 
 name: note
-::: notes{{ "\n" -}}
-{{- obj | string | trim("\n") -}}
-{{- "\n:::\n" -}}
+{{ "\n\n" }}::: notes
+{{ obj |trim }}
+:::{{ "\n" -}}
 
 name: only visible
-{% if "\n" in (obj|string|trim("\n")) %}
-{{- "\n" -}}
-::: { .fragment {%- if obj.attributes.overlay != "+" %} data-fragment-index="{{ obj.attributes.overlay | replace("|","-") }}"{% endif %} }
-{{- "\n" -}}
-{{- obj | string | trim("\n") -}}
-{{- "\n:::\n" -}}
+{% macro overlay(oo) -%}{% if oo -%}
+{# First non-"handout" statement -#}
+{% set tmp = namespace(o=oo) -%}{% for x in (oo|string).split("|") %}{% if not "handout" in x %}{% set tmp.o=x %}{% break %}{% endif %}{% endfor %}{% set o = tmp.o -%}
+{% if o|trim == "1" %}.fragment .fade-out data-fragment-index="2"{{ "" -}}
+{% elif o|trim == "+-" %}.fragment {{ "" -}}
+{% elif o|trim == "+" %}.fragment .current-visible{{ "" -}}
+{% elif o|string|int|string == o|string %}.fragment .current-visible data-fragment-index="{{ o }}"{{ "" -}}
+{% elif o|trim("-")|int|string~"-" == o %}.fragment data-fragment-index="{{ o|trim("-") }}"{{ "" -}}
+{% else %}.fragment .current-visible data-fragment-index="{{ oo }}"{{ "" -}}
+{% endif %}{% endif %}{% endmacro -%}
+{% if "\n" in (obj|trim("\n")) -%}
+{{ "\n" -}}
+::: { {{ overlay(obj.attributes.overlay) }} }
+{{ obj |trim -}}
+{{ "\n:::\n" -}}
 {% else %}
-[{{ obj }}]{ .fragment {%- if obj.attributes.overlay != "+" %} data-fragment-index="{{ obj.attributes.overlay | replace("|","-") }}"{% endif %} }
+[{{ obj |trim }}]{ {{ overlay(obj.attributes.overlay) }} }
 {% endif %}
 
 name: onlyenv visibleenv
-{{- "\n" -}}
-::: { .fragment {%- if obj.attributes.overlay != "+" %} data-fragment-index="{{ obj.attributes.overlay | replace("|","-") }}"{% endif %} }
-{{- "\n" -}}
-{{- obj | string | trim("\n") -}}
-{{- "\n:::\n" -}}
+{% macro overlay(oo) -%}{% if oo -%}
+{# First non-"handout" statement -#}
+{% set tmp = namespace(o=oo) -%}{% for x in (oo|string).split("|") %}{% if not "handout" in x %}{% set tmp.o=x %}{% break %}{% endif %}{% endfor %}{% set o = tmp.o -%}
+{% if o|trim == "1" %}.fragment .fade-out data-fragment-index="2"{{ "" -}}
+{% elif o|trim == "+-" %}.fragment {{ "" -}}
+{% elif o|trim == "+" %}.fragment .current-visible{{ "" -}}
+{% elif o|string|int|string == o|string %}.fragment .current-visible data-fragment-index="{{ o }}"{{ "" -}}
+{% elif o|trim("-")|int|string~"-" == o %}.fragment data-fragment-index="{{ o|trim("-") }}"{{ "" -}}
+{% else %}.fragment .current-visible data-fragment-index="{{ oo }}"{{ "" -}}
+{% endif %}{% endif %}{% endmacro -%}
+{{ "\n" -}}
+::: { {{ overlay(obj.attributes.overlay) }} }
+{{ obj |trim }}
+:::{{ "\n" -}}
 
 name: pause
 {{- "\n\n. . .\n\n" -}}

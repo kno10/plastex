@@ -1,19 +1,19 @@
 name: tabbing
 <table class="tabbing">
 <tr><td>
-{#- FIXME: support \kill etc. #}
-{%- for child in obj %}
-{%- if child.__class__.__name__.endswith("TabStop") %}
+{# FIXME: support \kill etc. -- see Markdown/Tabbing.jinja2s! #}
+{% for child in obj %}
+{% if child.__class__.__name__.endswith("TabStop") or child.__class__.__name__.endswith("SetTabStop") %}
 </td><td>
-{%- elif child.__class__.__name__.endswith("EndRow") %}
+{% elif child.__class__.__name__.endswith("EndRow") %}
 </td></tr>
 <tr><td>
-{%- elif child.__class__.__name__.endswith("kill") %}
+{% elif child.__class__.__name__.endswith("kill") %}
 </td></tr><!-- killed row -->
 <tr style="border-top:solid red 2px"><td>
-{%- else %}
+{% else %}
 {{ child }}
-{%- endif %}
-{%- endfor %}
+{% endif %}
+{% endfor %}
 </td></tr>
 </table>

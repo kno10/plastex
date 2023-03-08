@@ -23,7 +23,7 @@ name: slshape textsl
 *{{ obj }}*
 
 name: scshape textsc
-<span class="scshape">{{ obj }}</span>
+<span class="smallcaps">{{ obj }}</span>
 
 name: textnormal
 {{ obj }}
@@ -48,6 +48,9 @@ name: tt
 
 name: sc
 [{{ obj }}]{.smallcaps}
+
+name: uline
+[{{ obj }}]{.underline}
 
 name: sout
 ~~{{ obj }}~~

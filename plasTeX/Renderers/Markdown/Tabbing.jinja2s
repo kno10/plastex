@@ -1,40 +1,46 @@
 name: tabbing
-<table class="tabbing">
-<tr><td>
-{% set ns = namespace(good=0, skip=0) -%}
+{{ "\n" }}<table class="tabbing"><tr><td>{{ "" -}}
+{% set ns = namespace(good=-1, skip=-1, next=-1) -%}
 {% for child in obj -%}
-{% set cur = loop.index -%}
+{% set cur = loop.index0 -%}
 {% if cur > ns.good -%}
 {# SKIP until a following \kill, unless an EndRow is inbetween -#}
 {% for other in obj -%}
-{%   if loop.index > cur -%}
+{%   if loop.index0 > cur -%}
 {%     if other.__class__.__name__.endswith("EndRow") -%}
-{%       set ns.good = loop.index -%}
+{%       set ns.good = loop.index0 -%}
 {%       break -%}
 {%     elif other.__class__.__name__.endswith("kill") -%}
-{%       set ns.skip = loop.index + 1 -%}
+{%       set ns.skip = loop.index0 + 1 -%}
 {%       break -%}
 {%     endif -%}
 {%   endif -%}
 {%   if loop.last -%}
-{%     set ns.good = loop.index -%}
+{%     set ns.good = loop.index0 -%}
 {%   endif -%}
 {% endfor -%}
 {% endif -%}
 {% if cur >= ns.skip -%}
 {%   if child.__class__.__name__.endswith("TabStop") -%}
-</td><td>
+</td><td>{{ "" -}}
 {%   elif child.__class__.__name__.endswith("EndRow") -%}
-</td></tr>
-<tr><td>
-{%   elif child.__class__.__name__.endswith("kill") -%}
+</td></tr><tr><td>{{ "" -}}
+{%   elif child.__class__.__name__ == "kill" -%}
 </td></tr><!-- killed row -->
-<tr style="border-top:solid red 2px"><td>
+<tr style="border-top:solid red 2px"><td>{{ "" -}}
 {%   else -%}
-{{ child | string | trim("\n") | replace("\n\n\n\n","\n\n") | replace("\n\n\n", "\n\n") | indent(2, True) }}
+{#     -- Find end of cell, then render them at once to reduce spacing #}
+{%     for other in obj -%}
+{%       if loop.index0 >= cur and (loop.index == good or other.__class__.__name__.endswith("EndRow") or other.__class__.__name__.endswith("TabStop") or other.__class__.__name__.endswith("kill")) -%}
+{%         set ns.cellend = loop.index0 -%}
+{%         break -%}
+{%       endif -%}
+{%       if loop.last %}{% set ns.cellend = loop.index0 + 1 %}{% endif -%}
+{%     endfor -%}
+{% set tmp = render(obj[cur:ns.cellend]) |trim |replace("\n\n\n\n","\n\n") |replace("\n\n\n", "\n\n") -%}
+{% if tmp %}{{ "\n" }}{{ tmp|indent(2, True) }}{{ "\n" }}{% endif -%}
+{%   set ns.skip = ns.cellend -%}
 {%   endif -%}
-{% else -%}
 {% endif -%}
 {% endfor -%}
-</td></tr>
-</table>
+</td></tr></table>{{ "\n" -}}

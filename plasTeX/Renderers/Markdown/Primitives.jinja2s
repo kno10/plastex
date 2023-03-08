@@ -3,9 +3,9 @@ name: par
 {% set chi = obj.childNodes -%}
 {% if chi|count >= 1 -%}
 {% if sole and sole.nodeName|trim("*") in ["includegraphics", "tikzpicture", "center", "tabbing", "tabular", "itemize", "enumerate", "displaymath", "align", "alignat", "flalign"] -%}
-{{ sole |string |trim("\n") }}{{ "\n" -}}
+{{ render(sole) |trim }}{{ "\n" -}}
 {% else -%}
-{{ obj |string |trim("\n") }}{% if obj.blockType %}{{ "\n\n\n" }}{% else %}{{ "\n\n" }}{% endif -%}
+{{ obj |trim }}{% if obj.blockType %}{{ "\n\n\n" }}{% else %}{{ "\n\n" }}{% endif -%}
 {% endif -%}
 {% endif -%}
 {% endif -%}

@@ -1,7 +1,16 @@
 name: tikzpicture tikz
-{% if obj.renderer.vectorImager.enabled %}
-![]({{ obj.vectorImage }}){{ "" -}}
-{% if obj.attributes.overlay %}{{ "{" }} .fragment data-fragment-index="{{ obj.attributes.overlay }}"{{ "}" }}{% endif -%}
+{% macro overlay(oo) -%}{% if oo -%}
+{# First non-"handout" statement -#}
+{% set tmp = namespace(o=oo) -%}{% for x in (oo|string).split("|") %}{% if not "handout" in x %}{% set tmp.o=x %}{% break %}{% endif %}{% endfor %}{% set o = tmp.o -%}
+{% if o|trim == "1" %}.fragment .fade-out data-fragment-index="2"{{ "" -}}
+{% elif o|trim == "+-" %}.fragment {{ "" -}}
+{% elif o|trim == "+" %}.fragment .current-visible{{ "" -}}
+{% elif o|string|int|string == o|string %}.fragment .current-visible data-fragment-index="{{ o }}"{{ "" -}}
+{% elif o|trim("-")|int|string~"-" == o %}.fragment data-fragment-index="{{ o|trim("-") }}"{{ "" -}}
+{% else %}.fragment .current-visible data-fragment-index="{{ oo }}"{{ "" -}}
+{% endif %}{% endif %}{% endmacro -%}
+{% if obj.renderer.vectorImager.enabled -%}
+![]({{ obj.vectorImage }}){% if obj.attributes.overlay %}{ {{ overlay(obj.attributes.overlay) }}" }{% endif -%}
 {% endif -%}
 {{- "\n" }}```tex
 {{ obj.source }}
