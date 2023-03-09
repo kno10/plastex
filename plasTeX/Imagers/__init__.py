@@ -910,7 +910,7 @@ width 2pt\hskip2pt}}{}
                 if scale != 1:
                     tree.write(path)
                 # TODO: check if scour is availble, it is not strictly required.
-                cmd = ['scour', '-q', '--indent=none', '-o', path]
+                cmd = ['scour', '-q', '--no-line-breaks', '--indent=none', '-o', path]
                 subprocess.run(cmd, input=open(path,"rb").read(), check=True)
             # If PIL is available, convert the image to the appropriate type
             else:

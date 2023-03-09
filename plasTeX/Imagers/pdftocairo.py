@@ -39,7 +39,7 @@ class PDFSVGCairo(VectorImager):
 
                 tree.write(filename)
 
-            cmd = ['scour', '-q', '--indent=none', '-o', filename]
+            cmd = ['scour', '-q', '--no-line-breaks', '--indent=none', '-o', filename]
             subprocess.run(cmd, input=open(filename,"rb").read(), check=True)
 
         return images
