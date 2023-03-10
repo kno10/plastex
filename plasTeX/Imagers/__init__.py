@@ -434,6 +434,45 @@ def run_command(cmd: str, env: Optional[Dict] = None):
     if p.returncode:
         raise subprocess.CalledProcessError(p.returncode, cmd)
 
+def scale_svg(path, scale):
+    width = height = None
+    import xml.etree.ElementTree as ET
+    ET.register_namespace('', "http://www.w3.org/2000/svg")
+    ET.register_namespace('l', "http://www.w3.org/1999/xlink")
+    ET.register_namespace('h', "http://www.w3.org/1999/xhtml")
+    tree = ET.parse(path)
+    root = tree.getroot()
+    for attrib in ["width", "height"]:
+        m = length_re.match(root.attrib[attrib])
+        if m is None: raise ValueError # SVG has changed
+        if attrib == "width": width = float(m.group(1)) * scale
+        if attrib == "height": height = float(m.group(1)) * scale
+        if scale != 1:
+            root.attrib[attrib] = "{:.5g}{}".format(float(m.group(1)) * scale, m.group(2))
+    if scale != 1:
+        tree.write(path)
+    return (width, height)
+
+_scour_verified = None
+def scour(filename):
+    global _scour_verified
+    if _scour_verified is None:
+        proc = os.popen('scour --help')
+        proc.read()
+        _scour_verified = not proc.close()
+        if not _scour_verified:
+            log.warning("scour is not installed, not optimizing the SVGs.")
+    if not _scour_verified:
+        return
+    slurp = open(filename,"rb").read()
+    try:
+        cmd = ['scour', '-q', '--no-line-breaks', '--indent=none', '-o', filename]
+        subprocess.run(cmd, input=slurp, check=True)
+    except Exception as e:
+        log.warning("Image optimization with scour failed.")
+        # Restore image contents, as scour possibly broke the file
+        with open(filename, "wb") as of: of.write(slurp)
+
 class Imager(object):
     """ Generic Imager """
 
@@ -886,32 +925,16 @@ width 2pt\hskip2pt}}{}
                         else:
                             shutil.copyfile(name, path)
 
-            elif oldext == ".pdf" and newext == ".svg" and os.path.getsize(name) < 500000: # TODO: make limit configurable?
-                import subprocess
-                # FIXME: use pdf2svg if pdftocairo is not available?
-                cmd = ['pdftocairo', '-svg', '-nocrop', name, path]
-                if "page" in node.attributes: cmd.extend(['-f', node.attributes["page"], '-l', node.attributes["page"]]) # untested. select page in pdf
+            elif oldext == ".pdf" and newext == ".svg":
+                # FIXME: add a suitable API to the vector imager
+                #cmd = ['pdftocairo', '-svg', '-nocrop', name, path]
+                #if "page" in node.attributes: cmd.extend(['-f', node.attributes["page"], '-l', node.attributes["page"]])
+                cmd = ['inkscape', '--pdf-poppler', '-D', '-l', name, '-o', path]
+                if "page" in node.attributes: cmd.extend(['--pdf-page', node.attributes["page"]])
                 subprocess.run(cmd, check=True)
-                width = height = None
-                import xml.etree.ElementTree as ET
-                ET.register_namespace('', "http://www.w3.org/2000/svg")
-                ET.register_namespace('l', "http://www.w3.org/1999/xlink")
-                ET.register_namespace('h', "http://www.w3.org/1999/xhtml")
-                tree = ET.parse(path)
-                root = tree.getroot()
                 scale = self.get_scale(node.nodeName)
-                for attrib in ["width", "height"]:
-                    m = length_re.match(root.attrib[attrib])
-                    if m is None: raise ValueError # SVG has changed
-                    if attrib == "width": width = float(m.group(1)) * scale
-                    if attrib == "height": height = float(m.group(1)) * scale
-                    if scale != 1:
-                        root.attrib[attrib] = "{:.2f}{}".format(float(m.group(1)) * scale, m.group(2))
-                if scale != 1:
-                    tree.write(path)
-                # TODO: check if scour is availble, it is not strictly required.
-                cmd = ['scour', '-q', '--no-line-breaks', '--indent=none', '-o', path]
-                subprocess.run(cmd, input=open(path,"rb").read(), check=True)
+                width, height = scale_svg(path, scale)
+                scour(path)
             # If PIL is available, convert the image to the appropriate type
             else:
                 img = PILImage.open(name)
@@ -948,3 +971,4 @@ class VectorImager(Imager):
 
     def getCompiler(self):
         return self.config['images']['vector-compiler'] or Imager.getCompiler(self)
+

@@ -1,10 +1,8 @@
 import subprocess
 import re
-import xml.etree.ElementTree as ET
 from typing import List, Tuple
-from plasTeX.Imagers import VectorImager
+from plasTeX.Imagers import VectorImager, scale_svg, scour
 
-length_re = re.compile('([0-9\\.]*)(.*)')
 class PDFSVG(VectorImager):
     """ Imager that uses pdf2svg """
     fileExtension = '.svg'
@@ -18,29 +16,18 @@ class PDFSVG(VectorImager):
         subprocess.call(["pdfcrop", outfile, self.tmpFile.with_suffix('.cropped.pdf').name], stdout=subprocess.DEVNULL)
 
         images = []
-        with open("images.csv") as fh:
-            for no, line in enumerate(fh.readlines()):
-                filename = 'img%d.svg' % no
-                page, output, scale_str = line.split(",")
-                scale = float(scale_str.strip())
-                images.append((filename, output.rstrip()))
+        for no, line in enumerate(open("images.csv")):
+            filename = 'img%d.svg' % no
+            page, output, scale_str = line.split(",")
+            scale = float(scale_str.strip())
 
-                subprocess.run(['pdf2svg', self.tmpFile.with_suffix('.cropped.pdf').name, filename, str(page)], stdout=subprocess.DEVNULL, check=True)
+            subprocess.run(['pdf2svg', self.tmpFile.with_suffix('.cropped.pdf').name, filename, str(page)], stdout=subprocess.DEVNULL, check=True)
 
-                if scale != 1:
-                    ET.register_namespace('', "http://www.w3.org/2000/svg")
-                    ET.register_namespace('l', "http://www.w3.org/1999/xlink")
-                    ET.register_namespace('h', "http://www.w3.org/1999/xhtml")
-                    tree = ET.parse(filename)
-                    root = tree.getroot()
+            if scale != 1:
+                scale_svg(filename, scale)
+            scour(filename)
 
-                    for attrib in ["width", "height"]:
-                        m = length_re.match(root.attrib[attrib])
-                        if m is None:
-                            raise ValueError
-                        root.attrib[attrib] = "{:.2f}{}".format(float(m.group(1)) * scale, m.group(2))
-
-                    tree.write(filename)
+            images.append((filename, output.rstrip()))
 
         return images
 

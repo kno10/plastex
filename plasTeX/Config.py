@@ -252,7 +252,7 @@ def defaultConfig(loadConfigFiles: bool=False):
     images['vector-imager'] = StringOption(
         """ LaTeX to vector image program """,
         options = '--vector-imager',
-        default = 'pdftocairo pdf2svg dvisvgm',
+        default = 'pdftocairo pdf2svg inkscape dvisvgm',
     )
 
     images['filenames'] = StringOption(
