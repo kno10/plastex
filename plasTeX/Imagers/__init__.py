@@ -677,6 +677,14 @@ width 2pt\hskip2pt}}{}
             log.info("TEXINPUTS={}".format(new_texinputs))
             on_error(e)
             return
+        # run twice, because of pgf "remember picture"
+        # TODO: detect if it is necessary, e.g., check for "remember picture" in the source?
+        try:
+            self.compileLatex(texinputs=new_texinputs)
+        except Exception as e:
+            log.warning("Failed to compile image: {}".format(e))
+            on_error(e)
+            return
 
         # Execute converter
         try:
