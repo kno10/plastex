@@ -38,7 +38,7 @@ class includegraphics(Command):
                     pass 
 
         self.imageoverride = img
-        self.imagefilesize = os.path.getsize(img)
+        self.imagefilesize = os.path.getsize(img) if img else None
         return res
 
 class graphicspath(Command):

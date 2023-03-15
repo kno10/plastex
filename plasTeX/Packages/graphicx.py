@@ -105,7 +105,7 @@ class includegraphics(Command):
                 self.style['height'] = '%s%s' % (height, hunit)
 
         self.imageoverride = img
-        self.imagefilesize = os.path.getsize(img)
+        self.imagefilesize = os.path.getsize(img) if img else None
 
         return res
 
