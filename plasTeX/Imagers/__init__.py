@@ -511,8 +511,7 @@ class Imager(object):
                                           self.__class__.__name__+'.images'))
         if self.config['images']['cache'] and os.path.isfile(self._filecache):
             try:
-                with open(self._filecache, 'rb') as fh:
-                    self._cache = pickle.load(fh)
+                self._cache = pickle.load(open(self._filecache, 'rb'))
                 for key, value in list(self._cache.items()):
                     if not os.path.isfile(value.filename):
                         del self._cache[key]
@@ -894,9 +893,14 @@ width 2pt\hskip2pt}}{}
         name = getattr(node, 'imageoverride', None)
         if name is None:
             return self.newImage(node)
+        if node.attributes.get("options") and "trim" in node.attributes["options"]:
+            return self.newImage(node)
+        key = name
+        if node.attributes.get("options") and "page" in node.attributes["options"]:
+            key += "#page="+node.attributes["options"]["page"]
 
-        if name in self.staticimages:
-            return self.staticimages[name]
+        if key in self.staticimages:
+            return self.staticimages[key]
 
         # Copy or convert the image as needed
         path = self.newFilename()
@@ -936,9 +940,9 @@ width 2pt\hskip2pt}}{}
             elif oldext == ".pdf" and newext == ".svg":
                 # FIXME: add a suitable API to the vector imager
                 #cmd = ['pdftocairo', '-svg', '-nocrop', name, path]
-                #if "page" in node.attributes: cmd.extend(['-f', node.attributes["page"], '-l', node.attributes["page"]])
+                #if "page" in node.attributes.get("options", []): cmd.extend(['-f', node.attributes["options"]["page"], '-l', node.attributes["options"]["page"]])
                 cmd = ['inkscape', '--pdf-poppler', '-D', '-l', name, '-o', path]
-                if "page" in node.attributes: cmd.extend(['--pdf-page', node.attributes["page"]])
+                if node.attributes.get("options") and "page" in node.attributes["options"]: cmd.extend(['--pdf-page', node.attributes["options"]["page"]])
                 subprocess.run(cmd, check=True)
                 scale = self.get_scale(node.nodeName)
                 width, height = scale_svg(path, scale)
@@ -955,7 +959,7 @@ width 2pt\hskip2pt}}{}
                 img.save(path)
             #print(name, "->", path, self.newFilename.variables.get("id"))
             img = Image(path, self.ownerDocument.config['images'], width=width, height=height)
-            self.staticimages[name] = img
+            self.staticimages[key] = img
             return img
 
         # If anything fails, just let the imager handle it...
