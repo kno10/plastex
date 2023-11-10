@@ -2,18 +2,23 @@ name: -hspace
 <span class="hspace" style="margin-right: {{ obj.attributes.len }}">&nbsp;</span>
 
 name: -vspace
+{{ "\n\n" -}}
 <div class="vspace" style="margin-bottom: {{ obj.attributes.len }}">&nbsp;</div>
 
 name: vspace
+{{ "\n\n" }}
 
 name: -bigskip
+{{ "\n\n" -}}
 <div class="bigskip"></div>
 
 name: -medskip
+{{ "\n\n" -}}
 <div class="medskip"></div>
 
 name: -smallskip
-<div class="medskip"></div>
+{{ "\n\n" -}}
+<div class="smallskip"></div>
 
 name: bigskip medskip smallskip
 {{ "\n\n" }}

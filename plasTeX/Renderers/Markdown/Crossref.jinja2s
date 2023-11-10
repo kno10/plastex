@@ -1,13 +1,13 @@
 name: ref
-{% if 'label' in obj.idref and obj.idref.label.ref %}<a href="{{obj.idref.label.url}}">{{obj.idref.label.ref}}</a>{% else %}??{% endif %}
+{% if 'label' in obj.idref and obj.idref.label.ref %}[{{ obj.idref.label.ref }}]({{obj.idref.label.url}}){% else %}??{% endif %}
 
 name: eqref refeq
-{% if 'label' in obj.idref and obj.idref.label.ref %}<a href="{{obj.idref.label.url}}" class="eqref">{{obj.idref.label.ref}}</a>{% else %}??{% endif %}
+{% if 'label' in obj.idref and obj.idref.label.ref %}[{{ obj.idref.label.ref }}]({{obj.idref.label.url}}){ .eqref }{% else %}??{% endif %}
 
 name: cref Cref
-{% if 'label' in obj.idref and obj.idref.label.ref %}<a href="{{obj.idref.label.url}}">{{ obj.refname() }} {{obj.idref.label.ref}}</a>{% else %}??{% endif %}
+{% if 'label' in obj.idref and obj.idref.label.ref %}[{{ obj.refname() }} {{obj.idref.label.ref}}]({{obj.idref.label.url}}){ .eqref }{% else %}??{% endif %}
 
 name: pageref
-{% if  'label' in obj.idref and obj.idref.label.ref %}<a href="{{ obj.idref.label.url }}">*</a>{% else %}??{% endif %}
+{% if 'label' in obj.idref and obj.idref.label.ref %}[{{ * }}]({{obj.idref.label.url}}){% else %}??{% endif %}
 
 name: label

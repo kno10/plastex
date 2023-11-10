@@ -1,11 +1,11 @@
 name: columns
-{{- "\n" -}}
+{{- "\n\n" -}}
 :::: { .columns{{ "" -}}
 {% if obj.style.inline %} style="{{ obj.style.inline }}"{% endif -%}
 {% if obj.attributes.totalwidth %} style="width:{{ "%.2g%%"|format(obj.attributes.totalwidth|float*100) }}"{% endif -%}
 {{ " }\n" -}}
 {{ obj | trim("\n") -}}
-{{- "\n::::\n" -}}
+{{- "\n::::\n\n" -}}
 
 name: column columnenv
 {% macro overlay(oo) -%}{% if oo -%}
@@ -27,13 +27,14 @@ name: column columnenv
 ::::: { .col{{ "" -}}
 {%   set sole = chi|first if chi|count == 1 -%}
 {%   if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif -%}
+{%   if sole and sole.nodeName in ["flushleft", "small", "large"] %} .{{ sole.nodeName }}{% endif -%}
 {%   if sole and sole.nodeName in ["only", "onlyenv", "visible", "visibleenv"] %}{{ overlay(sole.attributes.overlay) }}{% endif -%}
 {%   if obj.style.inline %} style="{{ obj.style.inline }}"{% endif -%}
 {#   15.3846 = 100/6.5inch (\linewidth) -#}
 {%   if obj.attributes.width and obj.attributes.width.inch %} style="width:{{ "%.2g%%"|format(obj.attributes.width.inch|float*15.3846) }}"{{ "" -}}
 {%   elif obj.attributes.width %} style="width:{{ "%.2g%%"|format(obj.attributes.width|float*100) }}"{% endif -%}
 {{ " }\n" -}}
-{%   if sole and sole.nodeName in ["centering", "center", "centerline", "only", "onlyenv", "visible", "visibleenv"] -%}
+{%   if sole and sole.nodeName in ["centering", "center", "centerline", "flushleft", "small", "large", "only", "onlyenv", "visible", "visibleenv"] -%}
 {{ sole | trim("\n") -}}
 {%   else -%}
 {{ obj | trim("\n") -}}

@@ -2,61 +2,67 @@ name: mbox makebox
 <span class="mbox" {%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}>{{ obj }}</span>
 
 name: fbox framebox
-{{- "\n" -}}
-::: { .fbox
-{#- ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output #}
-{%- set chi = obj.childNodes %}
-{%- if chi[0]|string|trim == "" %}{%- set chi = chi[1:] %}{%- endif %}
-{%- if chi[-1]|string|trim == "" %}{%- set chi = chi[:-1] %}{%- endif %}
-{%- set sole = chi|first if chi|count == 1 %}
-{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
-{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}
-{{- " }\n\n" -}}
-{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
-{{- sole | trim("\n") }}
-{%- else %}
-{{ obj | trim("\n") }}
-{%- endif -%}
-:::{{ "\n" -}}
+{{- "\n\n" -}}
+::: { .fbox{{ "" -}}
+{# ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output -#}
+{% set chi = obj.childNodes -%}
+{% if chi[0]|string|trim == "" %}{% set chi = chi[1:] %}{% endif -%}
+{% if chi[-1]|string|trim == "" %}{% set chi = chi[:-1] %}{% endif -%}
+{% set sole = chi|first if chi|count == 1 -%}
+{% if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif -%}
+{% if sole and sole.nodeName in ["flushleft", "small", "large"] %} .{{ sole.nodeName }}{% endif -%}
+{#% if obj.style.inline %} style="{{ obj.style.inline }}"{% endif -%#}
+{% if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif -%}
+{{ " }\n\n" -}}
+{% if sole and sole.nodeName in ["centering", "center", "centerline", "flushleft", "small", "large"] -%}
+{{ sole | trim("\n") -}}
+{% else -%}
+{{ obj | trim("\n") -}}
+{% endif -%}
+:::{{ "\n\n" -}}
 
 name: parbox
 {{- "\n" -}}
-::: { .parbox
-{#- ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output #}
-{%- set chi = obj.childNodes %}
-{%- if chi[0]|string|trim == "" %}{%- set chi = chi[1:] %}{%- endif %}
-{%- if chi[-1]|string|trim == "" %}{%- set chi = chi[:-1] %}{%- endif %}
-{%- set sole = chi|first if chi|count == 1 %}
-{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
-{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}
-{{- " }\n\n" -}}
-{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
-{{- sole | trim("\n") }}
-{%- else %}
-{{ obj | trim("\n") }}
-{%- endif -%}
-{{- "\n\n:::\n" -}}
+::: { .parbox{{ "" -}}
+{# ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output -#}
+{% set chi = obj.childNodes -%}
+{% if chi[0]|string|trim == "" %}{% set chi = chi[1:] %}{% endif -%}
+{% if chi[-1]|string|trim == "" %}{% set chi = chi[:-1] %}{% endif -%}
+{% set sole = chi|first if chi|count == 1 -%}
+{% if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif -%}
+{% if sole and sole.nodeName in ["flushleft", "small", "large"] %} .{{ sole.nodeName }}{% endif -%}
+{#% if obj.style.inline %} style="{{ obj.style.inline }}"{% endif -%#}
+{% if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif -%}
+{{ " }\n\n" -}}
+{% if sole and sole.nodeName in ["centering", "center", "centerline", "flushleft", "small", "large"] -%}
+{{ sole | trim("\n") -}}
+{% else -%}
+{{ obj | trim("\n") -}}
+{% endif -%}
+{{ "\n:::\n\n" -}}
 
 name: minipage
-{{- "\n" -}}
-::: { .minipage
-{#- ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output #}
-{%- set chi = obj.childNodes %}
-{%- if chi[0]|string|trim == "" %}{%- set chi = chi[1:] %}{%- endif %}
-{%- if chi[-1]|string|trim == "" %}{%- set chi = chi[:-1] %}{%- endif %}
-{%- set sole = chi|first if chi|count == 1 %}
-{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif %}
-{%- if obj.style.inline %} style="{{ obj.style.inline }}"{% endif %}
-{%- if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}
-{{- " }\n\n" -}}
-{%- if sole and sole.nodeName in ["centering", "center", "centerline"] %}
-{{- sole | trim("\n") }}
-{%- else %}
-{{ obj | trim("\n") }}
-{%- endif -%}
-{{- "\n\n:::\n" -}}
+{{- "\n\n" -}}
+::: { .minipage{{ "" -}}
+{# ugly hack to trim leading/trailing newlines, then check for \centering, to produce more compact output -#}
+{% set chi = obj.childNodes -%}
+{% if chi[0]|string|trim == "" %}{% set chi = chi[1:] %}{% endif -%}
+{% if chi[-1]|string|trim == "" %}{% set chi = chi[:-1] %}{% endif -%}
+{% set sole = chi|first if chi|count == 1 -%}
+{% if sole and sole.nodeName in ["centering", "center", "centerline"] %} .centered{% endif -%}
+{% if sole and sole.nodeName in ["flushleft", "small", "large"] %} .{{ sole.nodeName }}{% endif -%}
+{#% if obj.style.inline %} style="{{ obj.style.inline }}"{% endif -%#}
+{% if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif -%}
+{{ " }\n" -}}
+{% if sole and sole.nodeName in ["centering", "center", "centerline", "flushleft", "small", "large"] -%}
+{{ sole | trim("\n") -}}
+{% else -%}
+{{ obj | trim("\n") -}}
+{% endif -%}
+{{ "\n:::\n\n" -}}
 
 
-name: raisebox rule
+name: raisebox
+{{ obj }}
+
+name: rule

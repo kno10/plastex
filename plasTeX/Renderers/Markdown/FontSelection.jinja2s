@@ -1,20 +1,20 @@
 name: mdseries textmd
-<span class="mdseries">{{ obj }}</span>
+[{{ obj|trim("\n") }}]{.mdseries}
 
 name: bfseries textbf
 **{{ obj }}**
 
 name: rmfamily textrm
-<span class="rmfamily">{{ obj }}</span>
+[{{ obj|trim("\n") }}]{.rmfamily}
 
 name: sffamily textsf
-<span class="sffamily">{{ obj }}</span>
+[{{ obj|trim("\n") }}]{.sffamily}
 
 name: ttfamily texttt
 `{{ obj }}`
 
 name: upshape textup
-<span class="upshape">{{ obj }}</span>
+[{{ obj|trim("\n") }}]{.upshape}
 
 name: itshape textit
 *{{ obj }}*
@@ -23,16 +23,16 @@ name: slshape textsl
 *{{ obj }}*
 
 name: scshape textsc
-<span class="smallcaps">{{ obj }}</span>
+[{{ obj|trim("\n") }}]{.smallcaps}
 
 name: textnormal
 {{ obj }}
 
 name: rm
-<span class="rm">{{ obj }}</span>
+[{{ obj|trim("\n") }}]{.rm}
 
 name: cal
-<i class="cal">{{ obj }}</i>
+[{{ obj|trim("\n") }}]{.cal}
 
 name: it
 *{{ obj }}*
@@ -47,43 +47,83 @@ name: tt
 `{{ obj }}`
 
 name: sc
-[{{ obj }}]{.smallcaps}
+[{{ obj|trim("\n") }}]{.smallcaps}
 
 name: uline
-[{{ obj }}]{.underline}
+[{{ obj|trim("\n") }}]{.underline}
 
 name: sout
 ~~{{ obj }}~~
 
 name: tiny
-[{{ obj }}]{.tiny}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.tiny}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.tiny}{% endif -%}
 
 name: scriptsize
-[{{ obj }}]{.scriptsize}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.scriptsize}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.scriptsize}{% endif -%}
 
 name: footnotesize
-[{{ obj }}]{.footnotesize}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.footnotesize}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.footnotesize}{% endif -%}
 
 name: small
-[{{ obj }}]{.small}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.small}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.small}{% endif -%}
 
 name: normalsize
-<span class="normalsize">{{ obj }}</span>
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.normalsize}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.normalsize}{% endif -%}
 
 name: large
-[{{ obj }}]{.large}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.large}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.large}{% endif -%}
 
 name: Large
-[{{ obj }}]{.xlarge}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.xlarge}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.xlarge}{% endif -%}
 
 name: LARGE
-[{{ obj }}]{.xxlarge}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.xclarge}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.xclarge}{% endif -%}
 
 name: huge
-[{{ obj }}]{.huge}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.huge}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.huge}{% endif -%}
 
 name: Huge
-[{{ obj }}]{.xhuge}
+{% if obj.childNodes|first and (obj.childNodes|first).nodeName == "par" -%}
+{{ "\n\n" }}::: {.xhuge}
+{{ obj | trim("\n") }}
+:::{{ "\n\n" -}}
+{% else -%}[{{ obj|trim("\n") }}]{.xhuge}{% endif -%}
 
 name: symbol
 {% if obj.renderer.vectorImager.enabled %}

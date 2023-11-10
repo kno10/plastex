@@ -5,7 +5,7 @@ name: itemize
 
 name: enumerate
 {{ "\n" }}{%- for item in obj -%}
-1. {{ item |trim("\n") |replace("\n\n\n\n", "\n\n") |replace("\n\n\n", "\n\n") |indent(2, False, True)}}{{ "\n" -}}
+1. {{ item |trim("\n") |replace("\n\n\n\n", "\n\n") |replace("\n\n\n", "\n\n") |indent(3, False, True)}}{{ "\n" -}}
 {%- endfor -%}
 
 name: list trivlist description

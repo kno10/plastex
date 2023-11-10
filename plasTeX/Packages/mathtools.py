@@ -9,27 +9,32 @@ getLogger().warning('Package mathtools is not well supported by plasTeX or mathj
 # also, the text in intertext may be double escaped.
 from plasTeX import Command, sourceChildren, sourceArguments
 from plasTeX.Base.LaTeX.Math import MathEnvironment
+
+# But for MathJax, we produce source that closes and reopens the environment
+# This only *mostly* works, for simple text.
 class intertext(Command):
     args = 'self'
     mathMode = False
+    counter = 'equation'
 
     @property
     def source(self):
         node = self.parentNode
         while node and not isinstance(node, MathEnvironment): node = node.parentNode
-        if node: return u"\\end{{{0}}}\n{1}\n\\begin{{{0}}}{2}".format(node.tagName, str(self), sourceArguments(node))
-        return Command.source(self) # fallback
+        if node: return u"\\end{{{0}}}\n\n{1}\n\n\\begin{{{0}}}{2}".format(node.tagName, str(self), sourceArguments(node))
+        return super().source # fallback
 
 class shortintertext(Command):
     args = 'self'
     mathMode = False
+    counter = 'equation'
 
     @property
     def source(self):
         node = self.parentNode
         while node and not isinstance(node, MathEnvironment): node = node.parentNode
-        if node: return u"\\end{{{0}}}\n{1}\n\\begin{{{0}}}{2}".format(node.tagName, str(self), sourceArguments(node))
-        return Command.source(self) # fallback
+        if node: return u"\\end{{{0}}}\n\n{1}\n\n\\begin{{{0}}}{2}".format(node.tagName, str(self), sourceArguments(node))
+        return super().source # fallback
 
 class casesStar(EqnarrayStar):
     macroName = "cases*"

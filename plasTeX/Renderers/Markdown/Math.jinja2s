@@ -1,5 +1,13 @@
 name: math
-${{ obj.mathjax_source | trim }}$
+{# inline common math abuse like $\leadsto$, but also assuming your math font is consistent with your text font! -#}
+{% set t = obj.mathjax_source|trim -%}
+{% if t == "\\leadsto" %}⇝{% else -%}
+{% if t == "\\rightarrow" %}→{% else -%}
+{% if t == "\\Rightarrow" %}⇒{% else -%}
+${{ obj.mathjax_source | trim }}${# -#}
+{% endif -%}
+{% endif -%}
+{% endif -%}
 
 name: ensuremath
 ${{ obj.mathjax_source | trim }}$
