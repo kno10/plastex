@@ -1,0 +1,28 @@
+/* Columns */
+div.columns {
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+}
+
+/* Alignment */
+div.centered {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0 auto;
+}
+
+div.flushleft, div.raggedright {
+  text-align: left;
+}
+div.flushright, div.raggedleft {
+  text-align: right;
+}
+div.raggedbottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+}
+

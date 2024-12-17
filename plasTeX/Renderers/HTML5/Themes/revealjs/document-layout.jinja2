@@ -1,0 +1,74 @@
+{% set rendererdata = obj.ownerDocument.rendererdata['html5'] %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="{{ config.files['output-encoding']}}" />
+<meta name="generator" content="plasTeX" />
+{% if obj.title %}
+<title>{{ obj.title }}</title>
+{% endif %}
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css">
+<link rel="stylesheet" href="plastex.css" />
+{% for css in rendererdata.get('css', []) %}
+<link rel="stylesheet" href="styles/{{ css }}" />
+{% endfor %}
+{% if config.html5['use-mathjax'] %}
+<script>
+  MathJax = { 
+    loader: {load: ['[tex]/mathtools', '[tex]/ams', '[tex]/textmacros', '[tex]/textcomp', '[tex]/centernot']},
+    tex: {
+	packages: {'[+]': ['mathtools','ams','textmacros', 'centernot']},
+	textmacros: { packages: {'[+]': ['textcomp']} },
+{% if config.html5['mathjax-dollars'] %}
+		    inlineMath: [['$','$'], ['\\(','\\)']],
+{% else %}
+		    inlineMath: [['\\(','\\)']],
+{% endif %}
+{% if config['mathjax-macros']['macros'] %}
+      macros: { {% for key, val in config['mathjax-macros']['macros'].items() %}
+        {{ key }}: {{ val }},
+        {% endfor %}
+      } 
+{% endif %}
+	} }
+</script>
+<script type="text/javascript" src="{{ config.html5['mathjax-url'] }}">
+</script>
+{% endif %}
+</head>
+
+<body>
+<div class="reveal">
+<div class="slides">
+{{ obj }}
+{% if obj.footnotes %}
+<section id="footnotes">
+<ol>
+{% for footnote in obj.footnotes %}
+  <li id="{{ footnote.id }}">{{ footnote }}</li>
+{% endfor %}
+</ol>
+</section>
+{% endif %}
+</div><!-- slides -->
+</div><!-- reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+	width: 1920, height: 1080,
+	controls: true,
+	progress: true,
+	center: true,
+	hash: true,
+});
+</script>
+{% for js in rendererdata.get('js', []) %}
+<script type="text/javascript" src="js/{{ js }}"></script>
+{% endfor %}
+</body>
+</html>

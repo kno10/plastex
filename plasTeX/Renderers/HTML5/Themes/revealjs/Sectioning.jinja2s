@@ -1,0 +1,62 @@
+name: abstract
+<div class="abstract">{{ obj }}</div>
+
+name: title author date thanks
+
+name: maketitle
+{% set metadata=obj.ownerDocument.userdata %}
+<section class="titlepage">
+<h1>{{ metadata.title }}</h1>
+{% if metadata.author %}
+<p class="authors">
+{%for author in metadata.author %}
+<span class="author">{{ author }}</span>
+{% endfor %}
+</p>
+{% endif %}
+{% if metadata.date %}
+<p class="date">{{ metadata.date }}</p>
+{% endif %}
+{% if metadata.thanks %}
+<p class="thanks">{{ metadata.thanks }}</p>
+{% endif %}
+</section>
+
+
+name: document
+{{ obj }}
+
+name: part chapter section
+<section>
+<h1 id="{{ obj.id }}">{{ obj.fullTitle }}</h1>
+</section>
+{{ obj }}
+
+
+name: subsection 
+<section>
+<h2 id="{{ obj.id }}">{{ obj.fullTitle }}</h2>
+</section>
+{{ obj }}
+
+
+name: subsubsection
+<section>
+<h3 id="{{ obj.id }}">{{ obj.fullTitle }}</h3>
+</section>
+{{ obj }}
+
+
+name: paragraph
+<h4 id="{{ obj.id }}">{{ obj.fullTitle }}</h4>
+{{ obj }}
+
+
+name: subparagraph
+<h5 id="{{ obj.id }}">{{ obj.fullTitle }}</h5>
+{{ obj }}
+
+
+name: subsubparagraph
+<h6 id="{{ obj.id }}">{{ obj.fullTitle }}</h6>
+{{ obj }}

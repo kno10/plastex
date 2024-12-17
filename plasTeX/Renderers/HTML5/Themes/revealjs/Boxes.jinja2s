@@ -1,0 +1,13 @@
+name: mbox makebox
+<span class="mbox" {% if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}>{{ obj }}</span>
+
+name: fbox framebox
+<span class="fbox" {% if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}>{{ obj }}</span>
+
+name: parbox
+<span class="parbox" {% if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}>{{ obj }}</span>
+
+name: minipage
+<div class="minipage" {% if obj.width %} style="width:{{ "%.2g%%"|format(obj.width|string|float*100) }}"{% endif %}>{{ obj }}</div>
+
+name: raisebox rule
